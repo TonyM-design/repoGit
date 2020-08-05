@@ -22,27 +22,13 @@ p {
 }
 
 
-.health-box {
-  background-color: #ccc;
-  height: 100px; 
-  border: solid 1px #aaa;
-}
-
 .espace-sante {
   background-color: #ccc;
   height: 100px; 
   border: solid 1px #aaa;
 }
 
-.health-bar {
-  background-color: #007f00;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  z-index: 5;
-  margin-top: -97px;
-  
-}
+
 
 .barre-vie-sante {
   background-color: #007f00;
@@ -54,14 +40,6 @@ p {
   
 }
 
-.health-bar-red {
-  width: 100%;
-  height: 100%;
-  background-color: #cc0000;
-  position: relative;
-
-}
-
 .barre-vie-degat {
   width: 100%;
   height: 100%;
@@ -70,12 +48,10 @@ p {
 
 }
 
-.health-bar-text {
-  position: relative;
-}
-
 .barre-vie-txt {
   position: relative;
+  text-align: center;
+  font-size: 60px;
 }
 
 .total {
@@ -295,33 +271,6 @@ p {
 border: solid 10px black;
 
 }
-
-.visuelVibrationOccupee {
-  animation-duration:1s;
-  animation-iteration-count: infinite;
-  animation-name: vibrationOccupee;
-}
-
-
-
-  @keyframes vibrationOccupee {
-    0% {
-      transform-origin: center;
-      box-shadow: 0px 0px 0px 0px rgb(158, 0, 0);
-    }
-    50% {
-      opacity: 1;
-      transform-origin: center;
-
-      box-shadow: 0px 0px 30px 5px rgb(158, 0, 0);
-    }
-    100% {
-      transform-origin: center;
-      box-shadow: 0px 0px 0px 0px rgb(158, 0, 0);
-    }
-  }
-
-
 .visuelVibration {
   animation-duration: 2s;
   animation-iteration-count: infinite;

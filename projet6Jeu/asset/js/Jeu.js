@@ -106,8 +106,6 @@ class Jeu {
   }
   initialiserBarreVie() {
     for (let i = 0; i < this.listeJoueurs.length; i++) {
-      const maxSante = this.listeJoueurs[i].sante;
-      $('.total').html(maxSante + "/" + 100);
       $(`#barre-vie-txt-joueur${i}`).html("100%");
       $(`#barre-vie-joueur${i}`).css({
         "width": "100%"
@@ -116,14 +114,17 @@ class Jeu {
   }
   majBarreVie(joueurCible) {
     var a = joueurCible.sante * (100 / 100); // diviser par la santé max ici 100
-    $(`#barre-vie-txt-joueur${this.fileAttentes.indexOf(joueurCible)}`).html(Math.round(a) + "%");
-    $(`#barre-degat-joueur${this.fileAttentes.indexOf(joueurCible)}`).animate({
+    console.log(joueurCible);
+    console.log(this.fileAttentes)
+    console.log(this.fileAttentes.indexOf(joueurCible))
+    $(`#barre-vie-txt-joueur${this.listeJoueurs.indexOf(joueurCible)}`).html(Math.round(a) + "%");
+    $(`#barre-degat-joueur${this.listeJoueurs.indexOf(joueurCible)}`).animate({
       'width': a + "%"
     }, 1000);
-    $(`#barre-vie-joueur${this.fileAttentes.indexOf(joueurCible)}`).animate({
+    $(`#barre-vie-joueur${this.listeJoueurs.indexOf(joueurCible)}`).animate({
       'width': a + "%"
     }, 700);
-    $('.total').html(joueurCible.sante + "/" + 100);
+
   }
 
   // GESTION JOUEURS
@@ -150,7 +151,7 @@ class Jeu {
     const joueurActifDepartAleatoire = this.fileAttentes[genererAleatoire(0, this.fileAttentes.length)]; // on choisit un joueur aleatoire dans la liste
     const cloneJoueur = joueurActifDepartAleatoire; // on instance le joueur
     console.log(this.fileAttentes);
-    this.fileAttentes.unshift(cloneJoueur);//  on place une instance du joueur suivant en haut du tableau 
+    this.fileAttentes.unshift(cloneJoueur);//  on place une instance du joueur suivant en Haut du tableau 
     console.log(this.fileAttentes);
     return this.fileAttentes;
   }
@@ -181,7 +182,18 @@ class Jeu {
     else if (this.joueurActif.directionDeplacement !== null && this.joueurActif.directionDeplacement !== valeurDirectionDeplacementJoueur) {
       console.log("deplacement autorisé uniquement sur le même axe");
       this.carte.ajouterVisuelJoueurActif(this.joueurActif);
-      this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.joueurActif.directionDeplacement);
+      if (this.joueurActif.directionDeplacement === "Gauche"){
+        this.carte.ajouterVisuelDeplacement(this.joueurActif, this.carte.caseGauche(this.joueurActif));
+      }
+      else if ( this.joueurActif.directionDeplacement === "Haut"){
+        this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseHaut(this.joueurActif));
+      }
+      else if (this.joueurActif.directionDeplacement === "Droite"){
+        this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseDroite(this.joueurActif));
+      }
+      else if (this.joueurActif.directionDeplacement === "Bas"){
+        this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseBas(this.joueurActif));
+      } 
       return false;
     }
     // OCCURENCE PRESENCE D'UN JOUEUR SUR LA CASE DE DESTINATION
@@ -203,22 +215,22 @@ class Jeu {
     if (event.which == 37) {
       this.joueurActif.positionY--;
       this.joueurActif.compteurDeplacement--;
-      this.joueurActif.directionDeplacement = "gauche";
+      this.joueurActif.directionDeplacement = "Gauche";
     }
     else if (event.which == 38) {
       this.joueurActif.positionX--
       this.joueurActif.compteurDeplacement--;
-      this.joueurActif.directionDeplacement = "haut";
+      this.joueurActif.directionDeplacement = "Haut";
     }
     else if (event.which == 39) {
       this.joueurActif.positionY++
       this.joueurActif.compteurDeplacement--;
-      this.joueurActif.directionDeplacement = "droite";
+      this.joueurActif.directionDeplacement = "Droite";
     }
     else if (event.which == 40) {
       this.joueurActif.positionX++
       this.joueurActif.compteurDeplacement--;
-      this.joueurActif.directionDeplacement = "bas";
+      this.joueurActif.directionDeplacement = "Bas";
     }
   }
   effectuerDeplacementJoueur(carteCaseDirection, valeurDirectionDeplacementJoueur) {
@@ -284,36 +296,36 @@ class Jeu {
     $(document).keydown((event) => {
       this.carte.ajouterVisuelJoueurActif(this.joueurActif);
       this.carte.rafraichirTableHTML();
-      if (event.which == 37) {// fleche gauche code ascii 37
+      if (event.which == 37) {// fleche Gauche code ascii 37
         event.preventDefault();
-        this.effectuerDeplacementJoueur(this.carte.caseGauche(this.joueurActif), "gauche")
+        this.effectuerDeplacementJoueur(this.carte.caseGauche(this.joueurActif), "Gauche")
 
-        if (this.gererExceptionDeplacement(this.carte.caseGauche(this.joueurActif), "gauche") !== false) {
+        if (this.gererExceptionDeplacement(this.carte.caseGauche(this.joueurActif), "Gauche") !== false) {
           ////////////////////////////////////////////////////////////////////////////////////////////// 
           this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseGauche(this.joueurActif))
           this.changerAutomatiquementJoueurActif();
         }
       }
-      if (event.which == 38) {      // fleche haut  code ascii 38
+      if (event.which == 38) {      // fleche Haut  code ascii 38
         event.preventDefault();
-        this.effectuerDeplacementJoueur(this.carte.caseHaut(this.joueurActif), "haut")
-        if (this.gererExceptionDeplacement(this.carte.caseHaut(this.joueurActif), "haut") !== false) {
+        this.effectuerDeplacementJoueur(this.carte.caseHaut(this.joueurActif), "Haut")
+        if (this.gererExceptionDeplacement(this.carte.caseHaut(this.joueurActif), "Haut") !== false) {
           this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseHaut(this.joueurActif))
           this.changerAutomatiquementJoueurActif();
         }
       }
-      if (event.which == 39) { // fleche droite  code ascii 39
+      if (event.which == 39) { // fleche Droite  code ascii 39
         event.preventDefault();
-        this.effectuerDeplacementJoueur(this.carte.caseDroite(this.joueurActif), "droite");
-        if (this.gererExceptionDeplacement(this.carte.caseDroite(this.joueurActif), "droite") !== false) {
+        this.effectuerDeplacementJoueur(this.carte.caseDroite(this.joueurActif), "Droite");
+        if (this.gererExceptionDeplacement(this.carte.caseDroite(this.joueurActif), "Droite") !== false) {
           this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseDroite(this.joueurActif))
           this.changerAutomatiquementJoueurActif();
         }
       }
-      if (event.which == 40) { // fleche bas  code ascii 40
+      if (event.which == 40) { // fleche Bas  code ascii 40
         event.preventDefault();
-        this.effectuerDeplacementJoueur(this.carte.caseBas(this.joueurActif), "bas");
-        if (this.gererExceptionDeplacement(this.carte.caseBas(this.joueurActif), "bas") !== false) {
+        this.effectuerDeplacementJoueur(this.carte.caseBas(this.joueurActif), "Bas");
+        if (this.gererExceptionDeplacement(this.carte.caseBas(this.joueurActif), "Bas") !== false) {
           this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseBas(this.joueurActif))
           this.changerAutomatiquementJoueurActif();
         }

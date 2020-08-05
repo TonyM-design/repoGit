@@ -279,16 +279,16 @@ class Carte {
       console.log("test ajout animation deplacement")
       if ( caseDirection !== undefined){
       if (caseDirection.traversable === true ) {
-        if (joueurActif.directionDeplacement === "gauche") {
+        if (joueurActif.directionDeplacement === "Gauche") {
           $(`#cellule${caseDirection.positionX}${caseDirection.positionY - k}`).addClass("visuelVibration");
         }
-        else if (joueurActif.directionDeplacement === "haut") {
+        else if (joueurActif.directionDeplacement === "Haut") {
           $(`#cellule${caseDirection.positionX - k}${caseDirection.positionY}`).addClass("visuelVibration");
         }
-        else if (joueurActif.directionDeplacement === "droite") {
+        else if (joueurActif.directionDeplacement === "Droite") {
           $(`#cellule${caseDirection.positionX}${caseDirection.positionY + k}`).addClass("visuelVibration");
         }
-        else if (joueurActif.directionDeplacement === "bas") {
+        else if (joueurActif.directionDeplacement === "Bas") {
           $(`#cellule${caseDirection.positionX + k}${caseDirection.positionY}`).addClass("visuelVibration");
         }
       }
