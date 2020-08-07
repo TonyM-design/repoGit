@@ -28,7 +28,6 @@ class Jeu {
     for (let k = 0; k < nombreJoueur; k++) {
       const ajoutJoueur = new Joueur;
       this.listeJoueurs.push(ajoutJoueur);
-      this.initialiserBarreVie();
       ajoutJoueur.numeroJoueur = k;
     }
   }
@@ -78,8 +77,18 @@ class Jeu {
     for (let i = 0; i < this.listeJoueurs.length; i++) {
       // div bootstrap col-md-6
       var dimensionnerAcBootstrap = document.createElement("div");
-      dimensionnerAcBootstrap.setAttribute("class", `col-md-6`)
+      dimensionnerAcBootstrap.setAttribute("class", `col-md-4`)
       dimensionnerAcBootstrap.setAttribute("id", `dimmensionnementBootstrap${i}`)
+      //nom joueur
+      var nomJoueur = document.createElement("div");
+      nomJoueur.setAttribute("class", " col-md-2 barre-etat");
+      nomJoueur.setAttribute("id", `barre-etat-joueur${i}`)
+      var txtZone = document.createElement("p");
+      txtZone.setAttribute("id", `nomjoueur${i}`);
+      txtZone.setAttribute("class", "col-md-2 nom-joueur")
+      nomJoueur.appendChild(txtZone)
+      var contenuTXT = document.createTextNode(`${this.listeJoueurs[i].nom}`);  
+      txtZone.appendChild(contenuTXT)
       //espace sante
       var espaceSante = document.createElement("div");
       espaceSante.setAttribute("id", `espace-vie-joueur${i}`);
@@ -95,17 +104,22 @@ class Jeu {
       //txtBarreVie
       var txtBarreVie = document.createElement("div");
       txtBarreVie.setAttribute("id", `barre-vie-txt-joueur${i}`);
-      txtBarreVie.setAttribute("class", "barre-vie-txt")
+      txtBarreVie.setAttribute("class", "barre-vie-txt");
 
       document.getElementById(`affichagesante`).appendChild(dimensionnerAcBootstrap);
+      document.getElementById(`affichagesante`).appendChild(nomJoueur);
       document.getElementById(`dimmensionnementBootstrap${i}`).appendChild(espaceSante);
       document.getElementById(`espace-vie-joueur${i}`).appendChild(barreRougeDegat);
       document.getElementById(`barre-degat-joueur${i}`).appendChild(barreVerteVie);
       document.getElementById(`barre-vie-joueur${i}`).appendChild(txtBarreVie);
+
     }
   }
   initialiserBarreVie() {
     for (let i = 0; i < this.listeJoueurs.length; i++) {
+      $(`#nomJoueur${i}`).html(`${this.listeJoueurs[i].nom}`);
+      $(`#barre-vie-txt-joueur${i}`).html(Math.round(`${this.listeJoueurs[i].sante}`) + "%");
+
       $(`#barre-vie-txt-joueur${i}`).html("100%");
       $(`#barre-vie-joueur${i}`).css({
         "width": "100%"
@@ -124,6 +138,18 @@ class Jeu {
     $(`#barre-vie-joueur${this.listeJoueurs.indexOf(joueurCible)}`).animate({
       'width': a + "%"
     }, 700);
+  }
+
+  creerIconePostureDefensive(joueurCible) {
+    var iconePosture = document.createElement("div");
+    iconePosture.setAttribute("class", "col-md-2 postureDefensive");
+    iconePosture.setAttribute("id", `postureDefenseJoueur${this.listeJoueurs.indexOf(joueurCible)}`);
+    if (joueurCible.postureDefensive === false){
+      document.getElementById(`barre-etat-joueur${this.listeJoueurs.indexOf(joueurCible)}`).appendChild(iconePosture);
+    }
+    else if (joueurCible.postureDefensive === true){
+      document.getElementById(`postureDefenseJoueur${this.listeJoueurs.indexOf(joueurCible)}`).remove();
+    }
 
   }
 
@@ -182,18 +208,18 @@ class Jeu {
     else if (this.joueurActif.directionDeplacement !== null && this.joueurActif.directionDeplacement !== valeurDirectionDeplacementJoueur) {
       console.log("deplacement autorisé uniquement sur le même axe");
       this.carte.ajouterVisuelJoueurActif(this.joueurActif);
-      if (this.joueurActif.directionDeplacement === "Gauche"){
+      if (this.joueurActif.directionDeplacement === "Gauche") {
         this.carte.ajouterVisuelDeplacement(this.joueurActif, this.carte.caseGauche(this.joueurActif));
       }
-      else if ( this.joueurActif.directionDeplacement === "Haut"){
+      else if (this.joueurActif.directionDeplacement === "Haut") {
         this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseHaut(this.joueurActif));
       }
-      else if (this.joueurActif.directionDeplacement === "Droite"){
+      else if (this.joueurActif.directionDeplacement === "Droite") {
         this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseDroite(this.joueurActif));
       }
-      else if (this.joueurActif.directionDeplacement === "Bas"){
+      else if (this.joueurActif.directionDeplacement === "Bas") {
         this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseBas(this.joueurActif));
-      } 
+      }
       return false;
     }
     // OCCURENCE PRESENCE D'UN JOUEUR SUR LA CASE DE DESTINATION
@@ -202,7 +228,9 @@ class Jeu {
       this.joueurActif.directionDeplacement = null;
       this.joueurActif.compteurDeplacement = 0;
       this.carte.enleverVisuelJoueurActif(this.joueurActif);
+      if(this.joueurActif.postureDefensive === false){
       this.declencherCombat(carteCaseDirection);
+    }
     }
     // OCCURENCE OBSTACLE OU CASE INEXISTANTE 
     else if ((this.carte.verifierCaseDeplacement(carteCaseDirection) === false || this.carte.verifierCaseTraversable(carteCaseDirection) === false) && this.joueurActif.compteurDeplacement < 3) {
@@ -299,9 +327,7 @@ class Jeu {
       if (event.which == 37) {// fleche Gauche code ascii 37
         event.preventDefault();
         this.effectuerDeplacementJoueur(this.carte.caseGauche(this.joueurActif), "Gauche")
-
         if (this.gererExceptionDeplacement(this.carte.caseGauche(this.joueurActif), "Gauche") !== false) {
-          ////////////////////////////////////////////////////////////////////////////////////////////// 
           this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseGauche(this.joueurActif))
           this.changerAutomatiquementJoueurActif();
         }
@@ -340,9 +366,31 @@ class Jeu {
       if (event.which == 96) { // pav num 0 permet au joueur de changer de posture // compteurdeplacement = 0 car le changement de posture est une partie du combat
         event.preventDefault();
         this.joueurActif.compteurDeplacement = 0;
-        this.joueurActif.changerPosture();
+
         console.log('le joueur change de posture');
+          this.creerIconePostureDefensive(this.joueurActif) 
+                 this.joueurActif.changerPosture();
         this.changerAutomatiquementJoueurActif();
+      }
+      else {
+        if (this.joueurActif.compteurDeplacement === 3) {
+          this.carte.ajouterVisuelDeplacementDisponibleOrigine(this.joueurActif);
+        }
+        else {
+          if (this.joueurActif.directionDeplacement === "Gauche") {
+            this.carte.ajouterVisuelDeplacement(this.joueurActif, this.carte.caseGauche(this.joueurActif));
+          }
+          else if (this.joueurActif.directionDeplacement === "Haut") {
+            this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseHaut(this.joueurActif));
+          }
+          else if (this.joueurActif.directionDeplacement === "Droite") {
+            this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseDroite(this.joueurActif));
+          }
+          else if (this.joueurActif.directionDeplacement === "Bas") {
+            this.carte.ajouterVisuelDeplacementDirection(this.joueurActif, this.carte.caseBas(this.joueurActif));
+          }
+
+        }
       }
       this.verifierSanteJoueurs();
 
@@ -355,6 +403,7 @@ class Jeu {
 
   declencherCombat(carteCaseDirection) {
     this.joueurActif.attaquer(carteCaseDirection.contenu);
+    // this.ajouterVisuelDegat()
     this.majBarreVie(carteCaseDirection.contenu)
     this.joueurActif.compteurDeplacement = 0;
 
@@ -386,6 +435,11 @@ class Jeu {
     return this.listeJoueurs;
   }
 
+  ajouterVisuelDegat(joueurCible){
+    let degat = (joueurCible.defense + joueurCible.equipements[0].bonusDefense) - (this.joueurActif.attaque + this.joueurActif.equipements[0].bonusAttaque);  
+    document.getElementById(`cellule${this.carte.determinerPositionAdversaireCasesAdjacentes(this.joueurActif).positionX}${this.carte.determinerPositionAdversaireCasesAdjacentes(this.joueurActif).positionY}`);
+    $(`#barre-vie-txt-joueur${i}`).html(Math.round(`${degat}`))
+  }
 
   // COMPILATION INITIALISATION
   initialiserJeu() {
@@ -393,6 +447,7 @@ class Jeu {
 
     this.placerCasesSpeciales();
     this.creerBarreVie()
+    this.initialiserBarreVie();
     this.choisirJoueurActifDepartAleatoire();
     this.actualiserOrdreFileAttente();
     this.determinerJoueurActif();
