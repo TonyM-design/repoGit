@@ -1,18 +1,19 @@
 class Carte {
-  constructor(nombreColonne, nombreCellule, nombreArmes, nombreCelluleGrise) {
+  constructor(nombreColonne, nombreCellule, nombreArmes, nombreCelluleGrise, nombreJoueur) {
     this.nombreColonne = nombreColonne;
     this.nombreCellule = nombreCellule;
     this.nombreArmes = nombreArmes;
+    this.nombreJoueur = nombreJoueur;
     this.nombreCelluleGrise = nombreCelluleGrise;
     this.nombreArmesPresentes = 0;
     this.nombreCelluleGrisePresente = 0;
     this.tableauColonnes = [];
     this.nombreJoueurPresent = 0;
-    this.caseAVerifier = "";
     this.stockageEmplacementOrigine = null;
-    this.caseDejaRemplace = null;
     this.genererCarteVierge();
+    this.joueurActif = null;
   }
+
 
   genererCarteVierge() {
     // CREATION TABLEAU DEUX DIMENSIONS STOCKAGE OBJ celluleVide 
@@ -23,6 +24,13 @@ class Carte {
         this.tableauColonnes[i][j] = new Cellule(i, j, "celluleVide", null, true);
       }
     }
+  }
+
+ placerCasesSpeciales(listeJoueurs) {
+    this.ajouterJoueurCarte(listeJoueurs);
+    this.ajouterArmeCarte();
+    this.ajouterBlocGrisCarte();
+    this.placerTableHTML()
   }
 
 
@@ -350,27 +358,6 @@ class Carte {
 
 
 
-  testajouterVisuelDeplacementDisponibleOrigine(joueurActif) {
-    if (joueurActif.compteurDeplacement === 3) {
-      for (let k = 0; k < joueurActif.compteurDeplacement + 1; k++) {
-        if (this.tableauColonnes[joueurActif.positionX][joueurActif.positionY - k].traversable === true && this.tableauColonnes[joueurActif.positionX][joueurActif.positionY - k] !== undefined) {
-          $(`#cellule${joueurActif.positionX}${joueurActif.positionY - k}`).addClass("visuelVibration");
-        }
-        if (this.tableauColonnes[joueurActif.positionX - k][joueurActif.positionX].traversable === true && this.tableauColonnes[joueurActif.positionX - k][joueurActif.positionX] !== undefined) {
-          $(`#cellule${joueurActif.positionX - k}${joueurActif.positionY}`).addClass("visuelVibration");
-        }
-        if (this.tableauColonnes[joueurActif.positionX][joueurActif.positionY + k].traversable === true && this.tableauColonnes[joueurActif.positionX][joueurActif.positionY + k] !== undefined) {
-          $(`#cellule${joueurActif.positionX}${joueurActif.positionY + k}`).addClass("visuelVibration");
-        }
-        if (this.tableauColonnes[joueurActif.positionX + k][joueurActif.positionY].traversable === true && this.tableauColonnes[joueurActif.positionX + k][joueurActif.positionY] !== undefined) {
-          $(`#cellule${joueurActif.positionX + k}${joueurActif.positionY}`).addClass("visuelVibration");
-        }
-
-      }
-    }
-  }
-
-
   creerStockageEmplacementOrigine(joueurActif) {
     this.stockageEmplacementOrigine = this.tableauColonnes[joueurActif.positionX][joueurActif.positionY];
     return this.stockageEmplacementOrigine;
@@ -389,8 +376,6 @@ class Carte {
   }
 
 
-
-
   // REMPLACER ANCIENNE CASE PAR CELLULE VIDE
   remplacerParCelluleVide() {
     this.stockageEmplacementOrigine.contenu = null;
@@ -398,15 +383,11 @@ class Carte {
     this.stockageEmplacementOrigine.traversable = true;
   }
 
-  remplacerParCaseJoueur(caseSuivante) { // VALABLE UNIQUEMENT POUR LE GAUCHE -> rendre plus generique !
+  remplacerParCaseJoueur(caseSuivante, joueurActif) { 
     // CREER LA NOUVELLE CASE JOUEUR
-    caseSuivante.contenu = nouvellePartie.joueurActif;
-    caseSuivante.typeCase = `joueur${nouvellePartie.joueurActif.numeroJoueur}`;
+    caseSuivante.contenu = joueurActif;
+    caseSuivante.typeCase = `joueur${joueurActif.numeroJoueur}`;
     caseSuivante.traversable = false;
   }
 
 }
-/*
-this.carte.genererCarteVierge();
-this.carte.ajouterVisuelDeplacementDisponibleOrigine(this.joueurActif)
-*/

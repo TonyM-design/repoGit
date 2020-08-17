@@ -3,12 +3,11 @@
 // modele joueurs 
 class Personnage {
   constructor() {
-    this.nom = prompt("entrez le nom de votre personnage:");
+    this.nom ="";
     this.sante = 100;
     this.attaque = 20;
     this.defense = 15;
     this.equipements = [new EpeeSimple];
-
   }
 }
 
