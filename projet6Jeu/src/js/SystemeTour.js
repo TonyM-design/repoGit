@@ -28,15 +28,12 @@ class SystemeTour {
     // on supprime instance initiale
     const cloneSupprimer = this.fileAttentes.indexOf(this.fileAttentes[0], 1);
     this.fileAttentes.splice(cloneSupprimer, 1);
-    console.log(this.fileAttentes);
     return this.fileAttentes;
   }
   choisirJoueurActifDepartAleatoire() {
     const joueurActifDepartAleatoire = this.fileAttentes[genererAleatoire(0, this.fileAttentes.length)]; // on choisit un joueur aleatoire dans la liste
     const cloneJoueur = joueurActifDepartAleatoire; // on instance le joueur
-    console.log(this.fileAttentes);
     this.fileAttentes.unshift(cloneJoueur);//  on place une instance du joueur suivant en Haut du tableau 
-    console.log(this.fileAttentes);
     return this.fileAttentes;
   }
 

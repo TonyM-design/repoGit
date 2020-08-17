@@ -20,7 +20,7 @@ class BarreVie{
       nomJoueur.setAttribute("id", `barre-etat-joueur${i}`)
       var txtZone = document.createElement("p");
       txtZone.setAttribute("id", `nomjoueur${i}`);
-      txtZone.setAttribute("class", "col-md-2 nom-joueur")
+      txtZone.setAttribute("class", "col-md-8 nom-joueur")
       nomJoueur.appendChild(txtZone)
       var contenuTXT = document.createTextNode(`${this.listeJoueurs[i].nom}`);  
       txtZone.appendChild(contenuTXT)
@@ -41,12 +41,14 @@ class BarreVie{
       txtBarreVie.setAttribute("id", `barre-vie-txt-joueur${i}`);
       txtBarreVie.setAttribute("class", "barre-vie-txt");
 
-      document.getElementById(`affichagesante`).appendChild(dimensionnerAcBootstrap);
-      document.getElementById(`affichagesante`).appendChild(nomJoueur);
-      document.getElementById(`dimmensionnementBootstrap${i}`).appendChild(espaceSante);
-      document.getElementById(`espace-vie-joueur${i}`).appendChild(barreRougeDegat);
-      document.getElementById(`barre-degat-joueur${i}`).appendChild(barreVerteVie);
-      document.getElementById(`barre-vie-joueur${i}`).appendChild(txtBarreVie);
+      $(`#affichagesante`).append(dimensionnerAcBootstrap);
+      $(`#affichagesante`).append(nomJoueur);
+      $(`#dimmensionnementBootstrap${i}`).append(espaceSante);
+      $(`#espace-vie-joueur${i}`).append(barreRougeDegat);
+      $(`#barre-degat-joueur${i}`).append(barreVerteVie);
+      $(`#barre-vie-joueur${i}`).append(txtBarreVie);
+      
+
 
     }
   }
@@ -65,9 +67,6 @@ class BarreVie{
   // IMPORTANT A VOIR COMMENT INTEGRER CA
   majBarreVie(joueurCible) {
     var a = joueurCible.sante * (100 / 100); // diviser par la santé max ici 100
-    console.log(joueurCible);
-    console.log(this.tour.fileAttentes)
-    console.log(this.tour.fileAttentes.indexOf(joueurCible))
     $(`#barre-vie-txt-joueur${this.tour.listeJoueurs.indexOf(joueurCible)}`).html(Math.round(a) + "%");
     $(`#barre-degat-joueur${this.tour.listeJoueurs.indexOf(joueurCible)}`).animate({
       'width': a + "%"
@@ -82,10 +81,10 @@ class BarreVie{
     iconePosture.setAttribute("class", "col-md-2 postureDefensive");
     iconePosture.setAttribute("id", `postureDefenseJoueur${this.tour.listeJoueurs.indexOf(joueurCible)}`);
     if (joueurCible.postureDefensive === false){
-      document.getElementById(`barre-etat-joueur${this.tour.listeJoueurs.indexOf(joueurCible)}`).appendChild(iconePosture);
+      $(`#barre-etat-joueur${this.tour.listeJoueurs.indexOf(joueurCible)}`).append(iconePosture);
     }
     else if (joueurCible.postureDefensive === true){
-      document.getElementById(`postureDefenseJoueur${this.tour.listeJoueurs.indexOf(joueurCible)}`).remove();
+      $(`#postureDefenseJoueur${this.tour.listeJoueurs.indexOf(joueurCible)}`).remove();
     }
 
   }

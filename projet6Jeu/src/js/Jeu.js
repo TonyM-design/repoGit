@@ -71,7 +71,6 @@ class Jeu {
       if (event.which == 32) { // espace fin de deplacement, declenchement phase de combat si possible
         event.preventDefault();
         this.systemeTours.joueurActif.compteurDeplacement = 0;
-        console.log("vous avez choisi de terminer vos deplacement")
         this.combat.declencherCombatCasesAdjacentes();
         this.changerAutomatiquementJoueurActif();
       }
@@ -79,7 +78,6 @@ class Jeu {
         event.preventDefault();
         this.systemeTours.joueurActif.compteurDeplacement = 0;
 
-        console.log('le joueur change de posture');
           this.barreVie.creerIconePostureDefensive(this.systemeTours.joueurActif) 
                  this.systemeTours.joueurActif.changerPosture();
         this.changerAutomatiquementJoueurActif();
@@ -141,7 +139,6 @@ class Jeu {
       }
 
     });
-    console.log("test de supprimerJoueur()");
     return this.listeJoueurs;
   }
 }

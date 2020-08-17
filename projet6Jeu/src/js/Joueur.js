@@ -3,7 +3,7 @@
 // modele joueurs 
 class Personnage {
   constructor() {
-    this.nom ="";
+    this.nom = "";
     this.sante = 100;
     this.attaque = 20;
     this.defense = 15;
@@ -21,21 +21,16 @@ class Joueur extends Personnage {
     this.compteurDeplacement = 3;
     this.directionDeplacement = null;
     this.postureDefensive = false;
-
   }
-
   recupererArme(caseAdjacenteChoixJoueurActif) {
     this.equipements.unshift(caseAdjacenteChoixJoueurActif.contenu);
   }
 
   deposerArme() {
-    
     return this.equipements.pop()
-
   }
 
   changerPosture() {
-
     if (this.postureDefensive === false) {
       this.postureDefensive = true;
     }
@@ -48,14 +43,13 @@ class Joueur extends Personnage {
     if (this.postureDefensive === false) {
       if (cible.sante > 0) {
         const degats = this.attaque + this.equipements[0].bonusAttaque;
-        console.log(`${this.nom} attaque ${cible.nom} et lui inflige ${degats} points de dégâts`
+        alert(`${this.nom} attaque ${cible.nom} et lui inflige ${degats} points de dégâts`
         );
         if (cible.postureDefensive === true) {
           cible.sante = cible.sante - degats / 2;
           if (cible.sante <= 0) {
             cible.sante = 0;
-            console.log("vous avez vaincu un ennemi")
-            // FIN PARTIE DEMANDER SI RELANCER JEU
+            alert("vous avez vaincu un ennemi")
           }
         }
         else {
@@ -63,23 +57,19 @@ class Joueur extends Personnage {
             cible.sante = cible.sante - (degats - cible.equipements[0].bonusDefense); // redonne de la vie lorsque bonus de defense superieur au degats
             if (cible.sante <= 0) {
               cible.sante = 0;
-              console.log("vous avez vaincu un ennemi")
-              // FIN PARTIE DEMANDER SI RELANCER JEU
+              alert("vous avez vaincu un ennemi")
             }
           }
-
-          else { console.log("les degats ont été prévenus par le bonus de defense de la cible")
+          else {
+            alert("les degats ont été prévenus par le bonus de defense de la cible")
+          }
         }
-
-        }
-
       }
-
     }
     else {
-      console.log("vous ne pouvez pas attaquer en posture defensive")
+      alert("vous ne pouvez pas attaquer en posture defensive")
     }
-    console.log(`${cible.nom} a encore ${cible.sante} points de vie`)
+    alert(`${cible.nom} a encore ${cible.sante} points de vie`)
   }
 
 }

@@ -48,7 +48,6 @@ class Carte {
 
   verifierCaseDeplacement(caseDirection) {
     if (caseDirection === undefined) {
-      console.log("cette case n'existe pas");
       return false;
     }
 
@@ -59,7 +58,6 @@ class Carte {
   verifierCaseTraversable(caseDirection) {
     if (this.verifierCaseDeplacement(caseDirection) === true) {
       if (this.tableauColonnes[caseDirection.positionX][caseDirection.positionY].traversable === false) {
-        console.log("cette case n'est pas traversable");
         return false;
       }
       else { return true }
@@ -74,7 +72,6 @@ class Carte {
 
   caseHaut(joueurActif) {
     if (this.tableauColonnes[joueurActif.positionX - 1] === undefined) {
-      console.log("erreur localisé")
     }
     else {
       return this.tableauColonnes[joueurActif.positionX - 1][joueurActif.positionY];
@@ -87,7 +84,6 @@ class Carte {
 
   caseBas(joueurActif) {
     if (this.tableauColonnes[joueurActif.positionX + 1] === undefined) {
-      console.log("erreur localisé")
     }
     else {
       return this.tableauColonnes[joueurActif.positionX + 1][joueurActif.positionY];
@@ -111,7 +107,6 @@ class Carte {
 
   detecterAdversaire(carteCaseDirection) {
     if (carteCaseDirection !== undefined && carteCaseDirection.traversable === false && carteCaseDirection.typeCase !== "cellulegrise") {
-      console.log("joueurDetecté");
       return true
     }
   }
@@ -173,42 +168,34 @@ class Carte {
           case 'AnneauSimple':
             // créer l'objet AnneauSImple
             caseArme.contenu = new AnneauSimple();
-            console.log(caseArme.contenu);
             break;
           case 'AnneauEpique':
             // créer l'objet AnneauEpique
             caseArme.contenu = new AnneauEpique();
-            console.log(caseArme.contenu);
             break;
           case 'BouclierSimple':
             // créer l'objet BouclierSimple
             caseArme.contenu = new BouclierSimple();
-            console.log(caseArme.contenu);
             break;
           // créer l'objet BouclierEpique
           case 'BouclierEpique':
             caseArme.contenu = new BouclierEpique();
-            console.log(caseArme.contenu);
             break;
           case 'EpeeSimple':
             // créer l'objet EpeeSimple
             caseArme.contenu = new EpeeSimple();
-            console.log(caseArme.contenu);
             break;
           case 'EpeeEpique':
             // créer l'objet EpeeEpique
             caseArme.contenu = new EpeeEpique();
-            console.log(caseArme.contenu);
             break;
           case 'CasqueSimple':
             // créer l'objet CasqueSimple
             caseArme.contenu = new CasqueSimple();
-            console.log(caseArme.contenu);
             break;
           case 'CasqueEpique':
             // créer l'objet CasqueEpique
             caseArme.contenu = new CasqueEpique();
-            console.log(caseArme.contenu);
             break;
 
         }
@@ -284,7 +271,6 @@ class Carte {
   ajouterVisuelDeplacementDirection(joueurActif, caseDirection) { // valide
 
     for (let k = 0; k < joueurActif.compteurDeplacement; k++) {
-      console.log("test ajout animation deplacement")
       if ( caseDirection !== undefined){
       if (caseDirection.traversable === true ) {
         if (joueurActif.directionDeplacement === "Gauche") {

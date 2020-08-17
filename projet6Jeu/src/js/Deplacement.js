@@ -63,12 +63,10 @@ class Deplacement{
           }
           // OCCURENCE DEPLACEMENT VERS CASE INEXISTANTE OU OCCUPEE T0
           else if (this.carte.verifierCaseDeplacement(carteCaseDirection) !== true && this.joueurActif.compteurDeplacement === 3) {
-            console.log("cette case n'existe pas 27/07 1200")
             this.carte.ajouterVisuelDeplacementDisponibleOrigine(this.joueurActif);
           }
         }
         else {
-          console.log("test bug visuel changement direction meme axe");
         }
       }
 
@@ -77,13 +75,11 @@ class Deplacement{
         // EXCEPTION PREMIER TOUR
         if (this.joueurActif.compteurDeplacement === 3) {
           if (this.carte.verifierCaseDeplacement(carteCaseDirection) === false) {
-            console.log("cette case n'existe pas");
             this.joueurActif.directionDeplacement = null;
             this.carte.ajouterVisuelDeplacementDisponibleOrigine(this.joueurActif)
             this.carte.ajouterVisuelJoueurActif(this.joueurActif);
           }
           else if (carteCaseDirection.typeCase === "cellulegrise") {
-            console.log("cette case n'est pas traversable");
             this.joueurActif.directionDeplacement = null;
             this.carte.ajouterVisuelDeplacementDisponibleOrigine(this.joueurActif)
             this.carte.ajouterVisuelJoueurActif(this.joueurActif);
@@ -92,7 +88,6 @@ class Deplacement{
         // FIN EXCEPTION PREMIER TOUR
         // OCCURENCE CHANGEMENT DE DIRECTION DURANT DEPLACEMENT
         else if (this.joueurActif.directionDeplacement !== null && this.joueurActif.directionDeplacement !== valeurDirectionDeplacementJoueur) {
-          console.log("deplacement autorisé uniquement sur le même axe");
           this.carte.ajouterVisuelJoueurActif(this.joueurActif);
           if (this.joueurActif.directionDeplacement === "Gauche") {
             this.carte.ajouterVisuelDeplacement(this.joueurActif, this.carte.caseGauche(this.joueurActif));
@@ -110,7 +105,6 @@ class Deplacement{
         }
         // OCCURENCE PRESENCE D'UN JOUEUR SUR LA CASE DE DESTINATION
         else if (this.carte.verifierCaseDeplacement(carteCaseDirection) === true && this.carte.verifierCaseTraversable(carteCaseDirection) === false && carteCaseDirection.typeCase !== "cellulegrise") {
-          console.log("Un joueur est present sur la case, debut phase de combat");
           this.joueurActif.directionDeplacement = null;
           this.joueurActif.compteurDeplacement = 0;
           this.carte.enleverVisuelJoueurActif(this.joueurActif);
@@ -122,7 +116,6 @@ class Deplacement{
         else if ((this.carte.verifierCaseDeplacement(carteCaseDirection) === false || this.carte.verifierCaseTraversable(carteCaseDirection) === false) && this.joueurActif.compteurDeplacement < 3) {
           this.joueurActif.compteurDeplacement = 0;
           this.carte.enleverVisuelJoueurActif(this.joueurActif);
-          console.log("aucune case disponible au deplacement sur le même axe, fin du deplacement")
         }
       }
 }
