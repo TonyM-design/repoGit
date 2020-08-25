@@ -22,6 +22,52 @@ class Joueur extends Personnage {
     this.directionDeplacement = null;
     this.postureDefensive = false;
   }
+
+  seDeplacerGauche(){
+this.positionY--;
+  }
+
+  seDeplacerHaut(){
+this.positionX--;
+  }
+
+  seDeplacerDroite(){
+this.positionY++;
+}
+  
+  seDeplacerBas(){
+this.positionX++;
+}
+
+seDeplacer(){
+  console.log(this.directionDeplacement);
+  console.log(this.compteurDeplacement);
+  if (this.directionDeplacement === "Gauche") {
+   this.seDeplacerGauche();
+   console.log("se deplacerGauche");
+   this.compteurDeplacement--;
+   this.directionDeplacement = "Gauche";
+  }
+  else if (this.directionDeplacement === "Haut") {
+this.seDeplacerHaut();
+console.log("se deplacerHaut");
+this.compteurDeplacement--;
+this.directionDeplacement = "Haut";
+  }
+  else if (this.directionDeplacement === "Droite") {
+this.seDeplacerDroite();
+console.log("se deplacerDroite");
+this.compteurDeplacement--;
+this.directionDeplacement = "Droite";
+  }
+  else if (this.directionDeplacement === "Bas") { 
+this.seDeplacerBas();
+console.log("se deplacerBas");
+this.compteurDeplacement--;
+this.directionDeplacement = "Bas";
+  }
+}
+
   recupererArme(caseAdjacenteChoixJoueurActif) {
     this.equipements.unshift(caseAdjacenteChoixJoueurActif.contenu);
   }

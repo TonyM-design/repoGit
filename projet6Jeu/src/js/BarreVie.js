@@ -1,20 +1,24 @@
 class BarreVie{
-    constructor(listeJoueurs, systemeTours){
+    constructor(listeJoueurs, i){
       this.listeJoueurs = listeJoueurs;     
-      this.barreVie = this.creerBarreVie();   
-      this.initialisation = this.initialiserBarreVie();
-      this.tour = systemeTours
+       
+      this.nombreIteration = i;
+        this.barreVie = this.creerBarreVie();
+      console.log(this.listeJoueurs);
     }
 
      // BARRE DE VIE
 
   creerBarreVie() {
-    for (let i = 0; i < this.listeJoueurs.length; i++) {
+      const i = this.nombreIteration;
+      console.log(i)
+
       // div bootstrap col-md-6
       var dimensionnerAcBootstrap = document.createElement("div");
       dimensionnerAcBootstrap.setAttribute("class", `col-md-4`)
       dimensionnerAcBootstrap.setAttribute("id", `dimmensionnementBootstrap${i}`)
       //nom joueur
+      console.log(this.listeJoueur);
       var nomJoueur = document.createElement("div");
       nomJoueur.setAttribute("class", " col-md-2 barre-etat");
       nomJoueur.setAttribute("id", `barre-etat-joueur${i}`)
@@ -22,7 +26,7 @@ class BarreVie{
       txtZone.setAttribute("id", `nomjoueur${i}`);
       txtZone.setAttribute("class", "col-md-8 nom-joueur")
       nomJoueur.appendChild(txtZone)
-      var contenuTXT = document.createTextNode(`${this.listeJoueurs[i].nom}`);  
+      var contenuTXT = document.createTextNode(`${this.listeJoueurs[`${i}`].nom}`);  
       txtZone.appendChild(contenuTXT)
       //espace sante
       var espaceSante = document.createElement("div");
@@ -51,7 +55,7 @@ class BarreVie{
 
 
     }
-  }
+  
   initialiserBarreVie() {
     for (let i = 0; i < this.listeJoueurs.length; i++) {
       $(`#nomJoueur${i}`).html(`${this.listeJoueurs[i].nom}`);
@@ -63,30 +67,4 @@ class BarreVie{
       });
     }
   }
-/////////////////////////////////////////////////
-  // IMPORTANT A VOIR COMMENT INTEGRER CA
-  majBarreVie(joueurCible) {
-    var a = joueurCible.sante * (100 / 100); // diviser par la santé max ici 100
-    $(`#barre-vie-txt-joueur${this.tour.listeJoueurs.indexOf(joueurCible)}`).html(Math.round(a) + "%");
-    $(`#barre-degat-joueur${this.tour.listeJoueurs.indexOf(joueurCible)}`).animate({
-      'width': a + "%"
-    }, 1000);
-    $(`#barre-vie-joueur${this.tour.listeJoueurs.indexOf(joueurCible)}`).animate({
-      'width': a + "%"
-    }, 700);
-  }
-
-  creerIconePostureDefensive(joueurCible) {
-    var iconePosture = document.createElement("div");
-    iconePosture.setAttribute("class", "col-md-2 postureDefensive");
-    iconePosture.setAttribute("id", `postureDefenseJoueur${this.tour.listeJoueurs.indexOf(joueurCible)}`);
-    if (joueurCible.postureDefensive === false){
-      $(`#barre-etat-joueur${this.tour.listeJoueurs.indexOf(joueurCible)}`).append(iconePosture);
-    }
-    else if (joueurCible.postureDefensive === true){
-      $(`#postureDefenseJoueur${this.tour.listeJoueurs.indexOf(joueurCible)}`).remove();
-    }
-
-  }
-////////////////////////////////////////////////
 }

@@ -3,14 +3,16 @@ class Jeu {
     this.listeNomJoueur = listeNomJoueur
     this.nombreJoueurAttendu = this.listeNomJoueur.length;
     this.listeJoueurs = [];
+    this.barreVies = [];
     this.carte = carte;
     this.ajouterJoueur(this.nombreJoueurAttendu);
-    this.fileAttentes = [];
-        this.systemeTours = new SystemeTour(this.listeJoueurs); 
-    this.barreVie = new BarreVie(this.listeJoueurs, this.systemeTours); 
-
-    this.combat = new Combat(this.carte,this.barreVie, this.systemeTours);
-    this.deplacement = new Deplacement(this.systemeTours, this.carte, this.combat); 
+    this.systemeTours = new SystemeTour(this.listeJoueurs);
+    for (let i = 0; i < this.listeJoueurs.length; i++) {
+      const barreVie = new BarreVie(this.listeJoueurs, i)
+      this.barreVies.push(barreVie);
+    }
+    this.gestionBarreVie = new GestionBarreVie(this.systemeTours);
+    this.deplacement = new Deplacement(this.carte);
 
   }
 
@@ -24,7 +26,7 @@ class Jeu {
   }
 
 
- 
+
 
   // SYSTEME DE JEU 
 
@@ -34,52 +36,63 @@ class Jeu {
     this.carte.ajouterVisuelDeplacementDisponibleOrigine(this.systemeTours.joueurActif);
     // reaction aux touches
     $(document).keydown((event) => {
+      this.deplacement.joueurCible = this.systemeTours.joueurActif;
       this.carte.ajouterVisuelJoueurActif(this.systemeTours.joueurActif);
       this.carte.rafraichirTableHTML();
       if (event.which == 37) {// fleche Gauche code ascii 37
         event.preventDefault();
-        this.deplacement.effectuerDeplacementJoueur(this.carte.caseGauche(this.systemeTours.joueurActif), "Gauche")
-        if (this.deplacement.gererExceptionDeplacement(this.carte.caseGauche(this.systemeTours.joueurActif), "Gauche") !== false) {
+        if (this.deplacement.joueurCible.directionDeplacement === null || this.deplacement.joueurCible.directionDeplacement === "Gauche") {
+          this.deplacement.joueurCible.directionDeplacement = "Gauche";
+          this.deplacement.effectuerDeplacementJoueur(this.carte.caseGauche(this.systemeTours.joueurActif), "Gauche")
           this.carte.ajouterVisuelDeplacementDirection(this.systemeTours.joueurActif, this.carte.caseGauche(this.systemeTours.joueurActif))
+          this.declencherCombat(this.carte.caseGauche(this.systemeTours.joueurActif));
           this.changerAutomatiquementJoueurActif();
         }
       }
       if (event.which == 38) {      // fleche Haut  code ascii 38
         event.preventDefault();
-        this.deplacement.effectuerDeplacementJoueur(this.carte.caseHaut(this.systemeTours.joueurActif), "Haut")
-        if (this.deplacement.gererExceptionDeplacement(this.carte.caseHaut(this.systemeTours.joueurActif), "Haut") !== false) {
+        if (this.deplacement.joueurCible.directionDeplacement === null || this.deplacement.joueurCible.directionDeplacement === "Haut") {
+          this.deplacement.joueurCible.directionDeplacement = "Haut";
+          this.deplacement.effectuerDeplacementJoueur(this.carte.caseHaut(this.systemeTours.joueurActif), "Haut")
           this.carte.ajouterVisuelDeplacementDirection(this.systemeTours.joueurActif, this.carte.caseHaut(this.systemeTours.joueurActif))
+          this.declencherCombat(this.carte.caseHaut(this.systemeTours.joueurActif));
           this.changerAutomatiquementJoueurActif();
         }
       }
       if (event.which == 39) { // fleche Droite  code ascii 39
         event.preventDefault();
-        this.deplacement.effectuerDeplacementJoueur(this.carte.caseDroite(this.systemeTours.joueurActif), "Droite");
-        if (this.deplacement.gererExceptionDeplacement(this.carte.caseDroite(this.systemeTours.joueurActif), "Droite") !== false) {
+        if (this.deplacement.joueurCible.directionDeplacement === null || this.deplacement.joueurCible.directionDeplacement === "Droite") {
+          this.deplacement.joueurCible.directionDeplacement = "Droite";
+          this.deplacement.effectuerDeplacementJoueur(this.carte.caseDroite(this.systemeTours.joueurActif), "Droite");
           this.carte.ajouterVisuelDeplacementDirection(this.systemeTours.joueurActif, this.carte.caseDroite(this.systemeTours.joueurActif))
+          this.declencherCombat(this.carte.caseDroite(this.systemeTours.joueurActif));
           this.changerAutomatiquementJoueurActif();
         }
       }
       if (event.which == 40) { // fleche Bas  code ascii 40
         event.preventDefault();
-        this.deplacement.effectuerDeplacementJoueur(this.carte.caseBas(this.systemeTours.joueurActif), "Bas");
-        if (this.deplacement.gererExceptionDeplacement(this.carte.caseBas(this.systemeTours.joueurActif), "Bas") !== false) {
+        if (this.deplacement.joueurCible.directionDeplacement === null || this.deplacement.joueurCible.directionDeplacement === "Bas") {
+          this.deplacement.joueurCible.directionDeplacement = "Bas";
+          this.deplacement.effectuerDeplacementJoueur(this.carte.caseBas(this.systemeTours.joueurActif), "Bas");
           this.carte.ajouterVisuelDeplacementDirection(this.systemeTours.joueurActif, this.carte.caseBas(this.systemeTours.joueurActif))
+          this.declencherCombat(this.carte.caseBas(this.systemeTours.joueurActif));
           this.changerAutomatiquementJoueurActif();
         }
       }
       if (event.which == 32) { // espace fin de deplacement, declenchement phase de combat si possible
         event.preventDefault();
         this.systemeTours.joueurActif.compteurDeplacement = 0;
-        this.combat.declencherCombatCasesAdjacentes();
+        if (this.systemeTours.joueurActif.postureDefensive === false) {
+          this.declencherCombatCasesAdjacentes();
+        }
         this.changerAutomatiquementJoueurActif();
       }
       if (event.which == 96) { // pav num 0 permet au joueur de changer de posture // compteurdeplacement = 0 car le changement de posture est une partie du combat
         event.preventDefault();
         this.systemeTours.joueurActif.compteurDeplacement = 0;
 
-          this.barreVie.creerIconePostureDefensive(this.systemeTours.joueurActif) 
-                 this.systemeTours.joueurActif.changerPosture();
+        this.barreVie.creerIconePostureDefensive(this.systemeTours.joueurActif)
+        this.systemeTours.joueurActif.changerPosture();
         this.changerAutomatiquementJoueurActif();
       }
       else {
@@ -109,7 +122,7 @@ class Jeu {
 
   }
 
-  changerAutomatiquementJoueurActif(){
+  changerAutomatiquementJoueurActif() {
     if (this.systemeTours.joueurActif.compteurDeplacement === 0) {
       this.carte.enleverVisuelJoueurActif(this.systemeTours.joueurActif);
       this.systemeTours.changerJoueurActif();
@@ -120,7 +133,27 @@ class Jeu {
       this.carte.rafraichirTableHTML();
     }
   }
-  
+
+
+  // declenchement du combat lorsque le joueur se deplace sur une case ayant deja un joueur
+  declencherCombat(carteCaseDirection) {
+    const joueurActif = this.systemeTours.determinerJoueurActif();
+    this.joueurActif = joueurActif;
+    if (this.carte.verifierCaseDeplacement(carteCaseDirection) === true && this.carte.verifierCaseTraversable(carteCaseDirection) === false && carteCaseDirection.typeCase !== "cellulegrise" && this.joueurActif.postureDefensive === false) {
+    this.joueurActif.attaquer(carteCaseDirection.contenu);
+    this.gestionBarreVie.majBarreVie(carteCaseDirection.contenu);
+    this.joueurActif.compteurDeplacement = 0;
+    }
+  }
+  // declenchement combat lorsque joueur present sur case adj
+  declencherCombatCasesAdjacentes() {
+    const joueurActif = this.systemeTours.determinerJoueurActif();
+    this.joueurActif = joueurActif;
+    if (this.carte.determinerPositionAdversaireCasesAdjacentes(this.joueurActif) !== false) {
+      this.joueurActif.attaquer(this.carte.determinerPositionAdversaireCasesAdjacentes(this.joueurActif).contenu);
+      this.gestionBarreVie.majBarreVie(this.carte.determinerPositionAdversaireCasesAdjacentes(this.joueurActif).contenu);
+    }
+  }
 
   verifierSanteJoueurs() {
     for (let i = 0; i < this.listeJoueurs.length; i++) {
