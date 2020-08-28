@@ -1,10 +1,8 @@
 class BarreVie{
     constructor(listeJoueurs, i){
       this.listeJoueurs = listeJoueurs;     
-       
       this.nombreIteration = i;
         this.barreVie = this.creerBarreVie();
-      console.log(this.listeJoueurs);
     }
 
      // BARRE DE VIE
@@ -54,7 +52,7 @@ class BarreVie{
       
 
 
-    }
+    } 
   
   initialiserBarreVie() {
     for (let i = 0; i < this.listeJoueurs.length; i++) {
@@ -66,5 +64,30 @@ class BarreVie{
         "width": "100%"
       });
     }
+  }
+
+  majBarreVie(joueurCible) {
+    var a = joueurCible.sante * (100 / 100); // diviser par la santé max ici 100
+    $(`#barre-vie-txt-joueur${this.listeJoueurs.indexOf(joueurCible)}`).html(Math.round(a) + "%");
+    $(`#barre-degat-joueur${this.listeJoueurs.indexOf(joueurCible)}`).animate({
+      'width': a + "%"
+    }, 1000);
+    $(`#barre-vie-joueur${this.listeJoueurs.indexOf(joueurCible)}`).animate({
+      'width': a + "%"
+    }, 700);
+  }
+
+  
+  creerIconePostureDefensive(joueurCible) {
+    var iconePosture = document.createElement("div");
+    iconePosture.setAttribute("class", "col-md-2 postureDefensive");
+    iconePosture.setAttribute("id", `postureDefenseJoueur${this.listeJoueurs.indexOf(joueurCible)}`);
+    if (joueurCible.postureDefensive === false){
+      $(`#barre-etat-joueur${this.listeJoueurs.indexOf(joueurCible)}`).append(iconePosture);
+    }
+    else if (joueurCible.postureDefensive === true){
+      $(`#postureDefenseJoueur${this.listeJoueurs.indexOf(joueurCible)}`).remove();
+    }
+
   }
 }

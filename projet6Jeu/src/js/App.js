@@ -6,6 +6,7 @@ class App {
         this.parametreUtilisateurs = new ParametreUtilisateurs(this.configuration);
         // implantation entrées utilisateurs dans la configuration
         const taillePlateau = this.parametreUtilisateurs.parametrerPlateau();
+        // pourquoi la verificaion nombre case ne s'effectue pas ? 
         this.configuration.nombreColonne = taillePlateau.nombreColonne;
         this.configuration.nombreCellule = taillePlateau.nombreCellule;
         // génération de la carte vierge avec dimension définie par la configuration

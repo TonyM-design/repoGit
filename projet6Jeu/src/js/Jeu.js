@@ -7,10 +7,6 @@ class Jeu {
     this.carte = carte;
     this.ajouterJoueur(this.nombreJoueurAttendu);
     this.systemeTours = new SystemeTour(this.listeJoueurs);
-    for (let i = 0; i < this.listeJoueurs.length; i++) {
-      const barreVie = new BarreVie(this.listeJoueurs, i)
-      this.barreVies.push(barreVie);
-    }
     this.gestionBarreVie = new GestionBarreVie(this.systemeTours);
     this.deplacement = new Deplacement(this.carte);
 
@@ -36,81 +32,81 @@ class Jeu {
     this.carte.ajouterVisuelDeplacementDisponibleOrigine(this.systemeTours.joueurActif);
     // reaction aux touches
     $(document).keydown((event) => {
-      this.deplacement.joueurCible = this.systemeTours.joueurActif;
-      this.carte.ajouterVisuelJoueurActif(this.systemeTours.joueurActif);
-      this.carte.rafraichirTableHTML();
+      const joueurCible = this.systemeTours.joueurActif; // attribut le joueurCible a Deplacement.js // A MODIFIER 
+      this.carte.rafraichirTableHTML();      
+      this.carte.ajouterVisuelJoueurActif(joueurCible);
+
+
+
       if (event.which == 37) {// fleche Gauche code ascii 37
-        event.preventDefault();
-        if (this.deplacement.joueurCible.directionDeplacement === null || this.deplacement.joueurCible.directionDeplacement === "Gauche") {
-          this.deplacement.joueurCible.directionDeplacement = "Gauche";
-          this.deplacement.effectuerDeplacementJoueur(this.carte.caseGauche(this.systemeTours.joueurActif), "Gauche")
-          this.carte.ajouterVisuelDeplacementDirection(this.systemeTours.joueurActif, this.carte.caseGauche(this.systemeTours.joueurActif))
-          this.declencherCombat(this.carte.caseGauche(this.systemeTours.joueurActif));
+        event.preventDefault();        
+        if (this.deplacement.gererExceptionDeplacement(this.carte.caseGauche(joueurCible), "Gauche",joueurCible) !== false) {
+          joueurCible.directionDeplacement = "Gauche";
+          this.deplacement.effectuerDeplacementJoueur(this.carte.caseGauche(joueurCible), "Gauche", joueurCible);
+          this.carte.ajouterVisuelDeplacementDirection(joueurCible, this.carte.caseGauche(joueurCible));
           this.changerAutomatiquementJoueurActif();
         }
       }
+     
       if (event.which == 38) {      // fleche Haut  code ascii 38
         event.preventDefault();
-        if (this.deplacement.joueurCible.directionDeplacement === null || this.deplacement.joueurCible.directionDeplacement === "Haut") {
-          this.deplacement.joueurCible.directionDeplacement = "Haut";
-          this.deplacement.effectuerDeplacementJoueur(this.carte.caseHaut(this.systemeTours.joueurActif), "Haut")
-          this.carte.ajouterVisuelDeplacementDirection(this.systemeTours.joueurActif, this.carte.caseHaut(this.systemeTours.joueurActif))
-          this.declencherCombat(this.carte.caseHaut(this.systemeTours.joueurActif));
+        if (this.deplacement.gererExceptionDeplacement(this.carte.caseHaut(joueurCible), "Haut",joueurCible) !== false) {
+          joueurCible.directionDeplacement = "Haut";
+          this.deplacement.effectuerDeplacementJoueur(this.carte.caseHaut(joueurCible), "Haut", joueurCible);
+          this.carte.ajouterVisuelDeplacementDirection(joueurCible, this.carte.caseHaut(joueurCible));
           this.changerAutomatiquementJoueurActif();
         }
       }
       if (event.which == 39) { // fleche Droite  code ascii 39
         event.preventDefault();
-        if (this.deplacement.joueurCible.directionDeplacement === null || this.deplacement.joueurCible.directionDeplacement === "Droite") {
-          this.deplacement.joueurCible.directionDeplacement = "Droite";
-          this.deplacement.effectuerDeplacementJoueur(this.carte.caseDroite(this.systemeTours.joueurActif), "Droite");
-          this.carte.ajouterVisuelDeplacementDirection(this.systemeTours.joueurActif, this.carte.caseDroite(this.systemeTours.joueurActif))
-          this.declencherCombat(this.carte.caseDroite(this.systemeTours.joueurActif));
+        if (this.deplacement.gererExceptionDeplacement(this.carte.caseDroite(joueurCible), "Droite",joueurCible) !== false) {
+          joueurCible.directionDeplacement = "Droite";
+          this.deplacement.effectuerDeplacementJoueur(this.carte.caseDroite(joueurCible), "Droite", joueurCible);
+          this.carte.ajouterVisuelDeplacementDirection(joueurCible, this.carte.caseDroite(joueurCible));
           this.changerAutomatiquementJoueurActif();
         }
       }
       if (event.which == 40) { // fleche Bas  code ascii 40
         event.preventDefault();
-        if (this.deplacement.joueurCible.directionDeplacement === null || this.deplacement.joueurCible.directionDeplacement === "Bas") {
-          this.deplacement.joueurCible.directionDeplacement = "Bas";
-          this.deplacement.effectuerDeplacementJoueur(this.carte.caseBas(this.systemeTours.joueurActif), "Bas");
-          this.carte.ajouterVisuelDeplacementDirection(this.systemeTours.joueurActif, this.carte.caseBas(this.systemeTours.joueurActif))
-          this.declencherCombat(this.carte.caseBas(this.systemeTours.joueurActif));
+        if (this.deplacement.gererExceptionDeplacement(this.carte.caseBas(joueurCible), "Bas",joueurCible) !== false) {
+          joueurCible.directionDeplacement = "Bas";
+          this.deplacement.effectuerDeplacementJoueur(this.carte.caseBas(joueurCible), "Bas", joueurCible);
+          this.carte.ajouterVisuelDeplacementDirection(joueurCible, this.carte.caseBas(joueurCible));
           this.changerAutomatiquementJoueurActif();
         }
       }
       if (event.which == 32) { // espace fin de deplacement, declenchement phase de combat si possible
         event.preventDefault();
-        this.systemeTours.joueurActif.compteurDeplacement = 0;
-        if (this.systemeTours.joueurActif.postureDefensive === false) {
+        joueurCible.compteurDeplacement = 0;
+        if (joueurCible.postureDefensive === false) {
           this.declencherCombatCasesAdjacentes();
         }
         this.changerAutomatiquementJoueurActif();
       }
       if (event.which == 96) { // pav num 0 permet au joueur de changer de posture // compteurdeplacement = 0 car le changement de posture est une partie du combat
         event.preventDefault();
-        this.systemeTours.joueurActif.compteurDeplacement = 0;
+        joueurCible.compteurDeplacement = 0;
 
-        this.barreVie.creerIconePostureDefensive(this.systemeTours.joueurActif)
-        this.systemeTours.joueurActif.changerPosture();
+        this.gestionBarreVie.barreVies[this.systemeTours.listeJoueurs.indexOf(joueurCible)].creerIconePostureDefensive(joueurCible) // a remettre dans gestion
+        joueurCible.changerPosture();
         this.changerAutomatiquementJoueurActif();
       }
       else {
-        if (this.systemeTours.joueurActif.compteurDeplacement === 3) {
-          this.carte.ajouterVisuelDeplacementDisponibleOrigine(this.systemeTours.joueurActif);
+        if (joueurCible.compteurDeplacement === 3) {
+          this.carte.ajouterVisuelDeplacementDisponibleOrigine(joueurCible);
         }
         else {
-          if (this.systemeTours.joueurActif.directionDeplacement === "Gauche") {
-            this.carte.ajouterVisuelDeplacement(this.systemeTours.joueurActif, this.carte.caseGauche(this.systemeTours.joueurActif));
+          if (joueurCible.directionDeplacement === "Gauche") {
+            this.carte.ajouterVisuelDeplacement(joueurCible, this.carte.caseGauche(joueurCible));
           }
-          else if (this.systemeTours.joueurActif.directionDeplacement === "Haut") {
-            this.carte.ajouterVisuelDeplacementDirection(this.systemeTours.joueurActif, this.carte.caseHaut(this.systemeTours.joueurActif));
+          else if (joueurCible.directionDeplacement === "Haut") {
+            this.carte.ajouterVisuelDeplacementDirection(joueurCible, this.carte.caseHaut(joueurCible));
           }
-          else if (this.systemeTours.joueurActif.directionDeplacement === "Droite") {
-            this.carte.ajouterVisuelDeplacementDirection(this.systemeTours.joueurActif, this.carte.caseDroite(this.systemeTours.joueurActif));
+          else if (joueurCible.directionDeplacement === "Droite") {
+            this.carte.ajouterVisuelDeplacementDirection(joueurCible, this.carte.caseDroite(joueurCible));
           }
-          else if (this.systemeTours.joueurActif.directionDeplacement === "Bas") {
-            this.carte.ajouterVisuelDeplacementDirection(this.systemeTours.joueurActif, this.carte.caseBas(this.systemeTours.joueurActif));
+          else if (joueurCible.directionDeplacement === "Bas") {
+            this.carte.ajouterVisuelDeplacementDirection(joueurCible, this.carte.caseBas(joueurCible));
           }
 
         }
@@ -127,10 +123,13 @@ class Jeu {
       this.carte.enleverVisuelJoueurActif(this.systemeTours.joueurActif);
       this.systemeTours.changerJoueurActif();
       this.systemeTours.determinerJoueurActif();
-      this.carte.ajouterVisuelJoueurActif(this.systemeTours.joueurActif)
+
       this.systemeTours.joueurActif.compteurDeplacement = 3;
       this.systemeTours.joueurActif.directionDeplacement = null;
       this.carte.rafraichirTableHTML();
+            this.carte.ajouterVisuelJoueurActif(this.systemeTours.joueurActif)
+            this.carte.ajouterVisuelDeplacementDisponibleOrigine(this.systemeTours.joueurActif);
+
     }
   }
 
@@ -175,7 +174,6 @@ class Jeu {
     return this.listeJoueurs;
   }
 }
-// EXECUTION
 
 
 

@@ -100,7 +100,7 @@ this.directionDeplacement = "Bas";
         }
         else {
           if (degats - cible.equipements[0].bonusDefense > 0) {
-            cible.sante = cible.sante - (degats - cible.equipements[0].bonusDefense); // redonne de la vie lorsque bonus de defense superieur au degats
+            cible.sante = cible.sante - (degats - cible.equipements[0].bonusDefense); 
             if (cible.sante <= 0) {
               cible.sante = 0;
               alert("vous avez vaincu un ennemi")

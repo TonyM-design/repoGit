@@ -31,17 +31,17 @@
         return nombreCelluleTraduit;
       }
     
-      parametrerPlateau() { // changer nom 
+      parametrerPlateau() { ////////////////// probleme nombre case si inferieur a arme + joueur + cellue grise
         let nombreColonne = null;
         let nombreCellule = null; 
         do {
           nombreColonne = this.parametrerNombreColonnes();
           nombreCellule = this.parametrerNombreCellules();
           
-          if (this.nombreJoueurAttendu + this.nombreArmes + this.nombreCellulesGrises > nombreColonne * nombreCellule) {
+          if (this.configuration.nombreJoueur + this.configuration.nombreArmes + this.configuration.nombreCellulesGrises > nombreColonne * nombreCellule) {
             alert("Pas assez de cases disponible sur le plateau de jeu, veuillez entrez de nouveaux paramètres");
           }
-        } while (this.nombreJoueurAttendu + this.nombreArmes + this.nombreCellulesGrises > nombreColonne * nombreCellule);
+        } while (this.configuration.nombreJoueur + this.configuration.nombreArmes + this.configuration.nombreCellulesGrises > nombreColonne * nombreCellule);
         return {nombreColonne, nombreCellule}
       }
 
