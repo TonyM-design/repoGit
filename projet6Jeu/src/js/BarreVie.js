@@ -9,14 +9,13 @@ class BarreVie{
 
   creerBarreVie() {
       const i = this.nombreIteration;
-      console.log(i)
+
 
       // div bootstrap col-md-6
       var dimensionnerAcBootstrap = document.createElement("div");
       dimensionnerAcBootstrap.setAttribute("class", `col-md-4`)
       dimensionnerAcBootstrap.setAttribute("id", `dimmensionnementBootstrap${i}`)
       //nom joueur
-      console.log(this.listeJoueur);
       var nomJoueur = document.createElement("div");
       nomJoueur.setAttribute("class", " col-md-2 barre-etat");
       nomJoueur.setAttribute("id", `barre-etat-joueur${i}`)

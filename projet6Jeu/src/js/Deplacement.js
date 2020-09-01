@@ -42,14 +42,12 @@ effectuerDeplacementJoueur(carteCaseDirection, valeurDirectionDeplacementJoueur,
     // EXCEPTION PREMIER TOUR
     if (joueurCible.compteurDeplacement === 3) {
       if (this.carte.verifierCaseDeplacement(carteCaseDirection) === false) {
-        console.log("cette case n'existe pas");
         joueurCible.directionDeplacement = null;
         this.carte.ajouterVisuelDeplacementDisponibleOrigine(joueurCible)
         this.carte.ajouterVisuelJoueurActif(joueurCible);
         return false
       }
       else if (carteCaseDirection.typeCase === "cellulegrise") {
-        console.log("cette case n'est pas traversable");
         joueurCible.directionDeplacement = null;
         this.carte.ajouterVisuelDeplacementDisponibleOrigine(joueurCible)
         this.carte.ajouterVisuelJoueurActif(joueurCible);
@@ -60,7 +58,6 @@ effectuerDeplacementJoueur(carteCaseDirection, valeurDirectionDeplacementJoueur,
     
     // OCCURENCE CHANGEMENT DE DIRECTION DURANT DEPLACEMENT
     else if (joueurCible.directionDeplacement !== null && joueurCible.directionDeplacement !== valeurDirectionDeplacementJoueur) {
-      console.log("deplacement autorisé uniquement sur le même axe");
       this.carte.ajouterVisuelJoueurActif(joueurCible);
       if (joueurCible.directionDeplacement === "Gauche") {
         this.carte.ajouterVisuelDeplacement(joueurCible, this.carte.caseGauche(joueurCible));
@@ -78,7 +75,6 @@ effectuerDeplacementJoueur(carteCaseDirection, valeurDirectionDeplacementJoueur,
     }
     // OCCURENCE PRESENCE D'UN JOUEUR SUR LA CASE DE DESTINATION
     else if (this.carte.verifierCaseDeplacement(carteCaseDirection) === true && this.carte.verifierCaseTraversable(carteCaseDirection) === false && carteCaseDirection.typeCase !== "cellulegrise") {
-      console.log("Un joueur est present sur la case, debut phase de combat");
       joueurCible.directionDeplacement = null;
       joueurCible.compteurDeplacement = 0;
       this.carte.enleverVisuelJoueurActif(joueurCible);
@@ -90,7 +86,6 @@ effectuerDeplacementJoueur(carteCaseDirection, valeurDirectionDeplacementJoueur,
     else if ((this.carte.verifierCaseDeplacement(carteCaseDirection) === false || this.carte.verifierCaseTraversable(carteCaseDirection) === false) && joueurCible.compteurDeplacement < 3) {
      joueurCible.compteurDeplacement = 0;
       this.carte.enleverVisuelJoueurActif(joueurCible);
-      console.log("aucune case disponible au deplacement sur le même axe, fin du deplacement")
     }
   }
 }
