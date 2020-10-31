@@ -9,10 +9,16 @@ class LocateButton extends React.Component {
             waitingLocation: true
     }
 }
-/*
+
+geolocationIsActivated(){
+
+}
+
     componentDidMount(){
         this.changeState()
-    }*/
+    }
+
+
     changeState = (e) => {
         this.state.waitingLocation ? (
             this.setState({

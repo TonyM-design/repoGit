@@ -15,7 +15,6 @@ function Aside() {
       </ul>
       <hr />
       <div className='menu'>
-        <p>test</p>
         <AsideInfo></AsideInfo>
       </div>
     </div>

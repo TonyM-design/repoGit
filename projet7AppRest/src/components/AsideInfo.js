@@ -1,32 +1,30 @@
 import React from 'react';
-import jsonData from '../DonneeTest'
+import InfoElement from './InfoElement'
+
 
 
 
 function AsideInfo() {
-    let dataList = require('../DonneeTest.json');
-   console.log(dataList);
-    console.log(dataList.length)
-       //  for (let i=0, i<dataList.length, i++){ // a placer dans le return directement !
-              return(<p>test</p>)
-                 
-              
-          
-      
+  let dataLists = require('../DonneeTest.json');
+  console.log(dataLists);
+  console.log(dataLists.length);
 
+  //  for (let i=0, i<dataList.length, i++){ // a placer dans le return directement !
 
+  return (
+    <div>
+      <p>aside info</p>
+      {dataLists.map((dataList, i) => {
+        return (
+          <div key={i} >
+          <InfoElement restaurantName={dataList.restaurantName} address ={dataList.address} ></InfoElement>
+          </div>
+        );  
+      }          
+  )
+}</div>
+  )
 }
 
 export default AsideInfo;
 
-
-/*  fetch('https://ghibliapi.herokuapp.com/films')
-.then(response => {
-  return response.json();
-})
-.then(data =>{
-  this.setState({
-    movies : data
-  });
-});
-}*/
