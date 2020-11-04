@@ -1,4 +1,5 @@
 import React from 'react';
+import Ratings from './Ratings'
 
 class InfoElement extends React.Component {
     constructor (props){
@@ -8,21 +9,23 @@ class InfoElement extends React.Component {
             address: this.props.address,
             lat: this.props.lat,
             long: this.props.long,
-  //          stars: this.props.ratings.stars,
-    //        comment: this.props.ratings.comment, 
+            ratings: this.props.ratings,
             visible : false,
             picture : null
     }
+    console.log(this.state.ratings)
 }
 setVisible(){
     // 
 }
 
 render(){
+    console.log(this.state.ratings)
     return(
         <div className='asideInfoElementList'>
-        <p  > Nom du restaurant:{this.state.restaurantName}</p>
-        <p  > Adresse du restaurant:{this.state.address}</p>
+        <p> Nom du restaurant:{this.state.restaurantName}</p>
+        <p> Adresse du restaurant:{this.state.address}</p>
+            <Ratings props={this.state.ratings} ></Ratings>
         </div>
     )
 }

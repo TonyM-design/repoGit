@@ -10,10 +10,6 @@ class LocateButton extends React.Component {
     }
 }
 
-geolocationIsActivated(){
-
-}
-
     componentDidMount(){
         this.changeState()
     }

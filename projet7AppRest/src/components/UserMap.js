@@ -32,7 +32,7 @@ export class CurrentLocation extends React.Component {
 
 
     recenterMap() { // recenterMap appelée lorsque currentLocation dans le state est MAJ
-        const map = this.map;
+        const map = this.map; // est appellée
         const current = this.state.currentLocation;
         const google = this.props.google;
         const maps = google.maps;
@@ -100,11 +100,12 @@ export class CurrentLocation extends React.Component {
     render() {
 // IMPOSSIBLE DE PLACER LE COL-LG-9 a la place de className= test
         return (
-            <div className ='test'>
+            
+            <div className ='test '>
                 <div  className='mapStyle' ref="map">
-                    Loading map...
+                    {this.renderChildren()}
                     </div>
-                {this.renderChildren()}
+                
             </div>
         );
     }
@@ -114,8 +115,8 @@ export class CurrentLocation extends React.Component {
 CurrentLocation.defaultProps = {
     zoom: 14,
     initialCenter: {
-        lat: 10,
-        lng: 10
+        lat: 0,
+        lng: 0
     },
     centerAroundCurrentLocation: false,
     visible: true
