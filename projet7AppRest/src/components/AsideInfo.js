@@ -5,17 +5,17 @@ import InfoElement from './InfoElement'
 
 
 function AsideInfo() {
-  let dataLists = require('../DonneeTest.json');
-  console.log(dataLists);
-  console.log(dataLists.length);
+  let restaurantList = require('../DonneeTest.json');
+  console.log(restaurantList);
+  console.log(restaurantList.length);
   
   return (
     <div>
       <p>aside info</p>
-      {dataLists.map((dataList, i) => {
+      {restaurantList.map((restaurant, i) => {
         return (
           <div key={i} >
-          <InfoElement restaurantName={dataList.restaurantName} address ={dataList.address} ratings= {dataList.ratings[i]} ></InfoElement>
+          <InfoElement restaurantName={restaurant.restaurantName} address ={restaurant.address} ratings= {restaurant.ratings} ></InfoElement>
           </div>
         );  
       }          

@@ -1,6 +1,6 @@
 import React from 'react';
 import Ratings from './Ratings'
-
+          
 class InfoElement extends React.Component {
     constructor (props){
         super(props);
@@ -13,19 +13,18 @@ class InfoElement extends React.Component {
             visible : false,
             picture : null
     }
-    console.log(this.state.ratings)
 }
 setVisible(){
     // 
 }
 
 render(){
-    console.log(this.state.ratings)
+    console.log(this.state)
     return(
         <div className='asideInfoElementList'>
         <p> Nom du restaurant:{this.state.restaurantName}</p>
         <p> Adresse du restaurant:{this.state.address}</p>
-            <Ratings props={this.state.ratings} ></Ratings>
+        <Ratings ratings={this.state.ratings} ></Ratings>
         </div>
     )
 }

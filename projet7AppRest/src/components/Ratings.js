@@ -1,11 +1,10 @@
 import React from 'react';
 
-function Ratings(props){
-const ratingObjects = props;
-console.log (ratingObjects);
+function Ratings({ratings}){
+console.log (ratings);
 
 //transforme l'obj en array
-let ratingArrays = Object.values(ratingObjects);
+let ratingArrays = Object.values(ratings);
 console.log(ratingArrays[0].stars)
 console.log(ratingArrays[0].comment)
 
