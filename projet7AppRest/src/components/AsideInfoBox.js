@@ -1,11 +1,11 @@
 import React from 'react';
-import InfoElement from './InfoElement'
+import InfoElement from './InfoElement.js'
 
 
 
 
-function AsideInfo() {
-  let restaurantList = require('../DonneeTest.json');
+function AsideInfoBox() {
+  const restaurantList = require('../DonneeTest.json');
   console.log(restaurantList);
   console.log(restaurantList.length);
   
@@ -24,5 +24,5 @@ function AsideInfo() {
   )
 }
 
-export default AsideInfo;
+export default AsideInfoBox;
 

@@ -1,34 +1,44 @@
-import React from 'react';
-import Ratings from './Ratings'
-          
-class InfoElement extends React.Component {
-    constructor (props){
-        super(props);
-        this.state = {
-            restaurantName: this.props.restaurantName,
-            address: this.props.address,
-            lat: this.props.lat,
-            long: this.props.long,
-            ratings: this.props.ratings,
-            visible : false,
-            picture : null
-    }
+import React, {useState} from "react";
+
+const InfoElement = (props) => {
+
+
+let [restaurantName, setRestaurantName] = useState(null);
+const majRestaurantName = () => {
+    setRestaurantName(restaurantName = props.restaurantName )
 }
-setVisible(){
-    // 
+let [adress, setAdress] = useState(null);
+const majAdress = () => {
+    setAdress(adress = props.adress )
+}
+let [lat, setLat] = useState(null);
+const majLat = () => {
+    setLat(lat = props.lat )
+}
+let [long, setLong] = useState(null);
+const majLong = () => {
+    setLong(long = props.long )
 }
 
-render(){
-    console.log(this.state)
-    return(
-        <div className='asideInfoElementList'>
-        <p> Nom du restaurant:{this.state.restaurantName}</p>
-        <p> Adresse du restaurant:{this.state.address}</p>
-        <Ratings ratings={this.state.ratings} ></Ratings>
-        </div>
-    )
-}
+console.log('test')
+
+
+
+
+return(
+    {majRestaurantName},
+    {majAdress},
+    {majLat},
+    {majLong},
+
+
+
+    <div className='asideInfoElementList'>
+    <p> Nom du restaurant:{restaurantName}</p>
+   
+    </div>
+    
+);
 }
 
 export default InfoElement;
-

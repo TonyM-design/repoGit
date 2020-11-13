@@ -1,5 +1,5 @@
 import React from 'react';
-import AsideInfo from './AsideInfo';
+import AsideInfoBox from './AsideInfoBox';
 
 
 
@@ -11,7 +11,7 @@ function Aside() {
       
       <hr />
       <div className='menu'>
-        <AsideInfo></AsideInfo>
+        <AsideInfoBox></AsideInfoBox>
       </div>
     </div>
 

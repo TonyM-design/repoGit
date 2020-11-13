@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 
 function Ratings({ratings}){
 console.log (ratings);
@@ -16,4 +16,4 @@ console.log(ratingArrays[0].comment)
       </div>
     );
 }
-export default Ratings;   
+export default Ratings;   */
