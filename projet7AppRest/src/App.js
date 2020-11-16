@@ -1,19 +1,21 @@
 import React from 'react';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Aside from './components/Aside';
+import GeolocationAccess from './components/Geolocation'
 import './App.css';
-import GeolocationModal from './components/GeolocationModal';
+
 function App() {
   return (
-    <div className="App">
-      <div className="container-fluid">
-        <div className="row ">
-
-<GeolocationModal></GeolocationModal>
-
-
-
-        </div>
-      </div>
-    </div>
+    <Container fluid id='App'>
+      <Row>
+{GeolocationAccess()}
+      <Aside></Aside>
+      
+      </Row>
+    </Container>
+      
+    
   );
 }
 

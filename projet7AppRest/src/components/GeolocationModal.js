@@ -1,37 +1,6 @@
-import React, { useState } from 'react';
-import ReactDom from 'react-dom'
+import React, {useState} from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import DisplayApp from './DisplayApp'
-
-function accessGeolocation() {
-    if ("geolocation" in navigator) {
-        console.log("Geolocation Disponible.");
-        return true;
-    } else {
-        return false;
-    }
-};
-
-const locateMe = () => {
-    if ("geolocation" in navigator) {
-        return new Promise((resolve, reject) => {
-
-            navigator.geolocation.getCurrentPosition((position) => {
-                const lng = position.coords.longitude;
-                const lat = position.coords.latitude
-                const newPosition = { lat, lng }
-
-                resolve(newPosition);
-
-
-            })
-        });
-
-    }
-    else return false
-
-}
 
 const GeolocationModal = () => {
 
@@ -40,18 +9,9 @@ const GeolocationModal = () => {
     const handleClose = () => setShow(false);
 
     function validateGeolocation() {
+        handleClose();
+        setShow(false);
 
-        accessGeolocation();
-        if (locateMe() !== false) {
-            handleClose();
-            setShow(false);
-
-            <DisplayApp lat={locateMe.lat} lng={locateMe.lng} />
-
-        }
-        else {
-            alert("geolocalisation obligatoire")
-        }
     }
 
     return (
@@ -73,5 +33,4 @@ const GeolocationModal = () => {
         </>
     );
 }
-
-export default GeolocationModal;
+ export default GeolocationModal

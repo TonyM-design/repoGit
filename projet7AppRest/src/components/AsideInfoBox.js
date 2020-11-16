@@ -5,18 +5,16 @@ import InfoElement from './InfoElement.js'
 
 
 function AsideInfoBox() {
-  const restaurantList = require('../DonneeTest.json');
-  console.log(restaurantList);
-  console.log(restaurantList.length);
+  const restaurantLists = require('../DonneeTest.json');
+  console.log(restaurantLists);
+  console.log(restaurantLists.length);
   
   return (
     <div>
       <p>aside info</p>
-      {restaurantList.map((restaurant, i) => {
+      {restaurantLists.map((restaurantList, i) => {
         return (
-          <div key={i} >
-          <InfoElement restaurantName={restaurant.restaurantName} address ={restaurant.address} ratings= {restaurant.ratings} ></InfoElement>
-          </div>
+          <InfoElement restaurantName ={restaurantList.restaurantName} key ={ i} ></InfoElement>
         );  
       }          
   )
