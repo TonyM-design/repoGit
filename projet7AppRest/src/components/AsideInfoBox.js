@@ -1,5 +1,5 @@
 import React from 'react';
-import InfoElement from './InfoElement.js'
+import InfoRestaurants from './InfoRestaurant.js'
 
 
 
@@ -13,9 +13,9 @@ function AsideInfoBox() {
     <div>
       <p>aside info</p>
       {restaurantLists.map((restaurantList, i) => {
-        return (
-          <InfoElement restaurantName ={restaurantList.restaurantName} key ={ i} ></InfoElement>
-        );  
+    return(
+          <InfoRestaurants restaurantName ={restaurantList.restaurantName} address = {restaurantList.address} ratings = {restaurantList.ratings} key ={ i} ></InfoRestaurants>
+    );
       }          
   )
 }</div>
