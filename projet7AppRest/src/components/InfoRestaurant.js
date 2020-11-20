@@ -1,29 +1,20 @@
-import React, {useState} from "react";
-import Advices from "./Advices";
+import React, { useState } from "react";
+import AdvicesDisplay from './AdvicesDisplay';
+import Button from 'react-bootstrap/Button';
 
-const DisplayAdvice = (ratings) => {
-    const listAdvices = ratings;
-    
-    listAdvices.map((listAdvice) =>{
-        const note = listAdvice.stars;
-        const comment = listAdvice.comment;
-        return(Advices(note, comment)     )
-} 
-  
-    )
 
-}
 
 const Inforestaurants = (props) => {
 
-return(
-    <div className='asideInfoElementList'>
-    <p> Nom du restaurant:{props.restaurantName}</p>
-    <p> Adresse:{props.address}</p>
-    {DisplayAdvice(props.ratings)}
-    </div>
-    
-);
+    return (
+        <div className='asideInfoElementList'>
+            <p> Nom du restaurant:{props.restaurantName}</p>
+            <p> Adresse:{props.address}</p>
+            {AdvicesDisplay(props.ratings)}
+            <Button variant="outline-secondary" > ajouter un avis   </Button>
+        </div>
+
+    );
 }
 
 export default Inforestaurants;

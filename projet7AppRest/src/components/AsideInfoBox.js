@@ -6,8 +6,6 @@ import InfoRestaurants from './InfoRestaurant.js'
 
 function AsideInfoBox() {
   const restaurantLists = require('../DonneeTest.json');
-  console.log(restaurantLists);
-  console.log(restaurantLists.length);
   
   return (
     <div>
