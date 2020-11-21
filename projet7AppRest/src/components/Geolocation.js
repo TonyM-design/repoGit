@@ -1,12 +1,7 @@
 import React,{useState} from 'react'
-
-const AccessGeolocation = () => {
-    if ("geolocation" in navigator) {
-        WatchPosition();
-    }
+import GeolocationModal from './GeolocationModal'
 
 
-};
 
 const WatchPosition = () => {
     return new Promise((resolve) => {
@@ -18,7 +13,13 @@ const WatchPosition = () => {
             console.log(newPosition)
             resolve(newPosition)
             return newPosition
-        });
+        },
+            function (error) {
+                if (error.code === error.PERMISSION_DENIED)
+                    console.log("Geolocalisation bloqué, placer Modal");
+                    
+    ;
+            });
     })
 };
 
@@ -26,5 +27,4 @@ const WatchPosition = () => {
 
 
 
-
-export default AccessGeolocation;
+export default WatchPosition;

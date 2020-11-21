@@ -5,8 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: -webkit-linear-gradient(to right, #19547b, #ffd89b);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #7194ac, #ffe49b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: -webkit-linear-gradient(to right, #19547b, #ffe4b97e);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #7194ac, #ffe4b97e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 code {
@@ -75,8 +75,15 @@ height: 100%;
 .aside {
 
   height: 98.5vh;
+
 }
 
 .asideInfoElementList{
-background-color: purple;
+background-color: rgba(255, 255, 255, 0.418);
+padding: 10px;
+margin-top: 5%;
+}
+
+.advice{
+  background-color: rgba(255, 255, 255, 0.418);
 }
