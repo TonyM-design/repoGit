@@ -33,11 +33,28 @@ function App() {
 
   // hook manage Modal
   let [useDisplayModal, setDisplayModal] = useState(false)
- 
+  // hook manage currentPosition for map
+  let [currentPosition, setCurrentPosition] = useState();
 
   const activeDisplayModal = () => {
     setDisplayModal(useDisplayModal = true)
   }
+
+  useEffect(() => {
+    navigator.geolocation.watchPosition(function (position) {
+      const lng = position.coords.longitude;
+      const lat = position.coords.latitude;
+      const newPosition = { lat, lng };
+
+    //   loader.load().then(() => {
+    //     new google.maps.Map(document.getElementById("map"), {
+    //         center: newPosition,
+    //         zoom: 8,
+    //     });
+    // });
+      setCurrentPosition(newPosition);
+    });
+  }, [setCurrentPosition]);
 
 
   return (
@@ -46,10 +63,9 @@ function App() {
         {WatchPosition()}
         {(useDisplayModal && <GeolocationModal></GeolocationModal>) || null}
         <Aside></Aside>
-        <ContainerMap>
-        {DisplayMap()}
-          <DisplayMap>{console.log("test de <DisplayMap></DisplayMap>")}</DisplayMap> 
-          {/* Pourquoi lorsque je met à la place '<DisplayMap></DisplayMap>' la map n'apparait plus ? */}
+        <ContainerMap id='map'  >
+          {DisplayMap()}
+          {/* <DisplayMap position={currentPosition}/> */}
         </ContainerMap>
       </Row>
     </Container>

@@ -54,10 +54,9 @@ code {
 }
 
 .test {
-  border: 5px dotted greenyellow;
-  position: absolute;
-  height: 100%;
-  width: 100%;
+  position: relative;
+  height: 100vh;
+  /* margin-top: 15px; */
 }
 
 .mapStyle {
@@ -86,4 +85,11 @@ margin-top: 5%;
 
 .advice{
   background-color: rgba(255, 255, 255, 0.418);
+}
+
+.map{
+  background-color: red;
+  width: 100vh;
+  height: 100vh;
+  border: 5px dotted;
 }
