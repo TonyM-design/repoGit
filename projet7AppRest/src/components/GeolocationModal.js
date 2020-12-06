@@ -5,9 +5,6 @@ import Button from 'react-bootstrap/Button';
 const GeolocationModal = (render) => {
      const [show, setShow] = useState(render);
     const handleClose = () => setShow(false);
-
-
-
     return (
         <>
             <Modal show={show} onHide={handleClose}>

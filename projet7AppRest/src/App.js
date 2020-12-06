@@ -50,6 +50,7 @@ function App() {
   return (
     <Container fluid id='App'>
       <Row>
+      {WatchPosition()}
         {(useDisplayModal && <GeolocationModal></GeolocationModal>) || null}
         
         <Map newPosition = {currentPosition}></Map>
