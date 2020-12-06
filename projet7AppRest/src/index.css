@@ -36,15 +36,13 @@ code {
   text-align: center;
   font-size: 12px;
   line-height: 1.42857;
-  border: 113px;
 }
 
 .menu {
-  background-color: rgba(212, 224, 223, 0.431);
   position: relative;
   float: left;
   padding-top: 15px ;
-  
+  border-radius: 5px;
   width: 100%;
 
 }
@@ -57,6 +55,7 @@ code {
   position: relative;
   height: 100vh;
   /* margin-top: 15px; */
+
 }
 
 .mapStyle {
@@ -72,8 +71,14 @@ height: 100%;
 
 
 .aside {
-
-  height: 98.5vh;
+position: absolute;
+margin-top: 0px;
+width: 20%;
+  height: 100vh;
+  padding: 15px;
+  z-index: 1;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.750);
 
 }
 
@@ -81,15 +86,23 @@ height: 100%;
 background-color: rgba(255, 255, 255, 0.418);
 padding: 10px;
 margin-top: 5%;
+border-radius: 5px;
 }
 
 .advice{
+  margin-top: 15px ;
   background-color: rgba(255, 255, 255, 0.418);
+  border: 1px solid rgba(208, 236, 247);
+  padding: 5px;
+
 }
 
 .map{
-  background-color: red;
-  width: 100vh;
-  height: 100vh;
-  border: 5px dotted;
+  
+  position: absolute ;
+  z-index: 0;
+  margin: 0px;
+  opacity: 10%;
+
+
 }

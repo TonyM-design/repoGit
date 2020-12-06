@@ -1,6 +1,6 @@
 [
     {
-       "restaurantName":"Test1",
+       "restaurantName":"La Vianderie",
        "address":"39 Rue des Petites Écuries, 75010 Paris",
        "lat":44.918038, 
        "long":-0.643045,
@@ -16,7 +16,7 @@
        ]
     },
     {
-       "restaurantName":"Test2",
+       "restaurantName":"La Pizzeria",
        "address":"4 Rue Lamarck, 75018 Paris",
        "lat":44.916625, 
        "long":-0.647497,
@@ -32,19 +32,16 @@
        ]
     },
     {
-       "restaurantName":"Test3",
+       "restaurantName":"La Sandwicherie",
        "address":"1 rue du nouveau test",
        "lat":44.916625, 
        "long":-0.647497,
        "ratings":[
           {
              "stars":5,
-             "comment":"Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
-          },
-          {
-             "stars":3,
-             "comment":"J'ai trouvé ça correct, sans plus"
+             "comment":"Pas cher et super sandwich !"
           }
+ 
        ]
     }
  ]

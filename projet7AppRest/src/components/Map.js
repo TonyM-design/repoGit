@@ -1,23 +1,37 @@
-import React from "react";
-import { Loader } from "@googlemaps/js-api-loader";
+import React,{useState , useEffect} from "react";
+
+import GoogleMapReact from 'google-map-react';
 
 
-const DisplayMap = (position) => {
-    const loader = new Loader({
-        apiKey: "AIzaSyCN5UCQGiOHjAI4_RCdZ-2Yuug2-4JYTzs",
-        version: "weekly",
-    });
-    // promsesse
-    const carte = loader.load().then(() => {
-        new google.maps.Map(document.getElementById("map"), {
-            center: { lat: 10, lng: 5},
-            zoom: 8,
-        });
-    });
 
+const Map = (currentLocation) => {
+    const lat = currentLocation.newPosition.lat
+    const lng = currentLocation.newPosition.lng
+    console.log(lat)
+    console.log(lng)
     return (
-<div>{carte}</div>)
-  
+
+            
+            <div style={{ height: '100vh', width: '100%', opacity:'85%' , zIndex:'0' }}>
+                
+                {lat && (
+          <GoogleMapReact
+            bootstrapURLKeys={{
+            key: "AIzaSyCN5UCQGiOHjAI4_RCdZ-2Yuug2-4JYTzs"
+            }}
+            defaultCenter={[lat, lng]}
+            defaultZoom={16}
+            center={{lat , lng}} 
+          ></GoogleMapReact>
+        )}
+        
+        
+            </div>);
+    
+    
 }
 
-export default DisplayMap
+export default Map
+
+
+

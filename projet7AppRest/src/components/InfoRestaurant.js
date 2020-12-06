@@ -5,12 +5,14 @@ import Button from 'react-bootstrap/Button';
 
 
 const Inforestaurants = (props) => {
+    
 
     return (
         <div className='asideInfoElementList'>
-            <p> Nom du restaurant:{props.restaurantName}</p>
-            <p> Adresse:{props.address}</p>
+            <h4>{props.restaurantName}</h4>
+            <p> {props.address}</p>
             {AdvicesDisplay(props.ratings)}
+            <hr></hr>
             <Button variant="outline-secondary" > ajouter un avis   </Button>
         </div>
 

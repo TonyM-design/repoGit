@@ -5,7 +5,7 @@ import AsideInfoBox from './AsideInfoBox';
 
 function Aside() {
   return (
-    <div className='aside col-lg-3'>
+    <div className='aside' >
       
         <h3> tittle + logo</h3>
       
