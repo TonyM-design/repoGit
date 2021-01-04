@@ -5,21 +5,14 @@ import Card from 'react-bootstrap/Card'
 
 
 
-function AsideInfoBox() {
-  const restaurantLists = require('../DonneeTest.json');
+function AsideInfoBox(props) {
+  const restaurantLists = props.restaurantLists
   
   return (
-
-
-
-
-
-
-
     <div>
       {restaurantLists.map((restaurantList, i) => {
     return(
-      <Accordion defaultActiveKey="0" key={i}>
+      <Accordion defaultActiveKey="0" key={i} >
   <Card>
     <Accordion.Toggle as={Card.Header} eventKey="1">
       <h6>{restaurantList.restaurantName}</h6>

@@ -1,13 +1,25 @@
-import React,{Component} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
+//import mapLimitReducer from './reducers/mapLimitReducer';
+import rootReducer from './reducers/rootReducer'
+
+const store = createStore(rootReducer);
+const restaurantLists = require('./DonneeTest.json');
+
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+  <Provider store={store}>    
+  {console.log(store)}
+    <App restaurantLists={restaurantLists} />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

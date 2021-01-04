@@ -2,7 +2,7 @@
     {
        "restaurantName":"La Vianderie",
        "address":"39 Rue des Petites Écuries, 75010 Paris",
-       "lat":44.918038, 
+       "lat":44.00, 
        "long":-0.643045,
        "ratings":[
           {
@@ -18,8 +18,8 @@
     {
        "restaurantName":"La Pizzeria",
        "address":"4 Rue Lamarck, 75018 Paris",
-       "lat":44.916625, 
-       "long":-0.647497,
+       "lat":45.916625, 
+       "long":3.647497,
        "ratings":[
           {
              "stars":5,
@@ -34,8 +34,8 @@
     {
        "restaurantName":"La Sandwicherie",
        "address":"1 rue du nouveau test",
-       "lat":44.916625, 
-       "long":-0.647497,
+       "lat":46.916625, 
+       "long":-1.647497,
        "ratings":[
           {
              "stars":5,
