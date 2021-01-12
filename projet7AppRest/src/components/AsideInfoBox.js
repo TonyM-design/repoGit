@@ -19,7 +19,7 @@ function AsideInfoBox(props) {
     </Accordion.Toggle>
     <Accordion.Collapse eventKey="1">
       <Card.Body>          
-      <InfoRestaurants restaurantName ={restaurantList.restaurantName} address = {restaurantList.address} ratings = {restaurantList.ratings} key ={ i} ></InfoRestaurants>
+      <InfoRestaurants restaurantList ={restaurantList}  key ={ i} ></InfoRestaurants>
 </Card.Body>
     </Accordion.Collapse>
   </Card>

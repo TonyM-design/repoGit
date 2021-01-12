@@ -6,12 +6,13 @@ import GeolocationModal from './components/GeolocationModal';
 import Map from './components/Map';
 import './App.css';
 import { useSelector } from 'react-redux';
-import { useStore } from 'react-redux'
 
 
 
 const restaurantLists = require('./DonneeTest.json'); // a placer tout en haut de la hierarchie
- 
+
+
+
 
 function App(props) {
   // user location
@@ -24,7 +25,7 @@ function App(props) {
     },
       function (error) {
         if (error.code === error.PERMISSION_DENIED)
-        activeDisplayModal()
+          activeDisplayModal()
       });
   };
 
@@ -46,71 +47,87 @@ function App(props) {
     });
   }, [setCurrentPosition]);
 
-  
+
   //Get bounds from mapLimitReducer
-const userBounds = useSelector(state => state)
-  console.log(userBounds)
-     
-/*
-     // hook manage list of visible restaurant
-     const [[filterByBoundsRestaurantLists], setfilterByBoundsRestaurantLists] = useState([]); // état initial vide
-     useEffect(() => {
-       // filter
-       if (userBounds.userBounds.bounds !== undefined && userBounds.userBounds.bounds !== null) {
-         const ne = userBounds.userBounds.bounds.ne
-         const nw = userBounds.userBounds.bounds.nw
-         const se = userBounds.userBounds.bounds.se
-         const sw = userBounds.userBounds.bounds.sw
-         const newLists = [];
+  const userBounds = useSelector(state => state)
 
-         restaurantLists.map((restaurantList, i) => {
-           if (restaurantList.lat <= ne.lat && restaurantList.lat >= se.lat){
-             if (restaurantList.long <= ne.lng && restaurantList.long >= sw.lng){
-                 newLists.push(restaurantList)
-             }
-           }
-         })
-         setfilterByBoundsRestaurantLists(newLists);// nouvel état contenant la nouvelle liste
-        }
-     }, [setfilterByBoundsRestaurantLists]);
+  // Get if user wants return bests filtered restaurant list 
+  const activeStarFilter = useSelector(state => state.activeFilterByStars)
+  console.log(activeStarFilter)
 
+  // Get range of the filtered list
+  const minRange = useSelector(state => state.starRange.min);
+  const maxRange = useSelector(state => state.starRange.max)
 
-     */
-    
-//VALIDE MAIS A TRANSFORMER EN HOOKS 
+  
 
-  const filterRestaurantLists = (userBounds, restaurantLists) => {
-    const filteredRestaurantLists = [];
-    console.log(userBounds)
-    if (userBounds.userBounds.bounds !== undefined && userBounds.userBounds.bounds !== null) {
-      restaurantLists.map((restaurantList, i) => {
-        console.log('test avant condition')
-        if (restaurantList.lat <= userBounds.userBounds.bounds.ne.lat && restaurantList.lat >= userBounds.userBounds.bounds.se.lat){
-          if (restaurantList.long <= userBounds.userBounds.bounds.ne.lng && restaurantList.long >= userBounds.userBounds.bounds.sw.lng){
-              filteredRestaurantLists.push(restaurantList)
-          }
-        }
-        
-      })
+  const calculateRestaurantStarAverage = (valuesStarsList) => {
+      var b = valuesStarsList.length,
+          c = 0, i;
+      for (i = 0; i < b; i++){
+        c += Number(valuesStarsList[i]);
+      }
+      return c/b;
     }
-    console.log(filteredRestaurantLists)
-    return filteredRestaurantLists
+    
+
+
+
+ // A INTEGRER DANS FILTERRESTAURANTLISTS ()
+ const filterByStars = (restaurantList, filteredRestaurantLists) => {
+   const valuesStarsList = [];
+restaurantList.ratings.map((rating, i) => {
+valuesStarsList.push(rating.stars)
+})
+const averageStar = calculateRestaurantStarAverage (valuesStarsList)
+if (averageStar >= minRange && averageStar <= maxRange ) {
+  filteredRestaurantLists.push(restaurantList)
+
+}
+
+ }
+  //VALIDE MAIS A FACTORISER
+
+  const filterRestaurantLists = (userBounds, activeStarFilter, restaurantLists) => {
+    const filteredRestaurantLists = [];
+    if (userBounds.userBounds.bounds !== undefined && userBounds.userBounds.bounds !== null && activeStarFilter === false) {
+      restaurantLists.map((restaurantList, i) => {
+        if (restaurantList.lat <= userBounds.userBounds.bounds.ne.lat && restaurantList.lat >= userBounds.userBounds.bounds.se.lat) {
+          if (restaurantList.long <= userBounds.userBounds.bounds.ne.lng && restaurantList.long >= userBounds.userBounds.bounds.sw.lng) {
+          filteredRestaurantLists.push(restaurantList)
+          console.log(activeStarFilter)
+          
+        }
+      }
+      })
   }
+  if (userBounds.userBounds.bounds !== undefined && userBounds.userBounds.bounds !== null && activeStarFilter === true) {
+    restaurantLists.map((restaurantList, i) => {
+      if (restaurantList.lat <= userBounds.userBounds.bounds.ne.lat && restaurantList.lat >= userBounds.userBounds.bounds.se.lat) {
+        if (restaurantList.long <= userBounds.userBounds.bounds.ne.lng && restaurantList.long >= userBounds.userBounds.bounds.sw.lng) {
+          filterByStars(restaurantList, filteredRestaurantLists)
+        console.log(activeStarFilter)
+        
+      }
+    }
+    })
+}
+  return filteredRestaurantLists
+}
 
 
 
 
-  return (
-    <Container fluid id='App'>
-      <Row>
-        {WatchPosition()}
-        {(useDisplayModal && <GeolocationModal></GeolocationModal>) || null}
-
-        <Map newPosition={currentPosition} onChange ={filterRestaurantLists(userBounds,restaurantLists)}> </Map>
-        <Aside restaurantLists={props.restaurantLists} ></Aside>
-      </Row>
-    </Container>
-  );
+return (
+  <Container fluid id='App'>
+    <Row>
+      {WatchPosition()}
+      {(useDisplayModal && <GeolocationModal></GeolocationModal>) || null}
+      <Map newPosition={currentPosition} > </Map>
+      <Aside restaurantLists={filterRestaurantLists(userBounds,activeStarFilter.activeFilterByStars, restaurantLists)} ></Aside>
+    </Row>
+  </Container>
+);
 }
 
 export default App;
