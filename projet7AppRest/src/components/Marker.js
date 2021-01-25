@@ -18,7 +18,7 @@ if (contenu.lat !== userLat && contenu.long !== userLng) {
   }
   else return (
     <div>
-      <div className='markerUser animated pulse '></div>
+      <div className='markerUser blob '></div>
     </div>
   )
 /*fait la meme chose qu'au dessus -> fait par David

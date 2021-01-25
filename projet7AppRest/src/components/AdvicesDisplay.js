@@ -9,7 +9,7 @@ const AdvicesDisplay = (ratings) => {
       <div className='advicesBox'>
         {listAdvices.map((listAdvice, i) => (
           <Advice 
-            note={listAdvice.stars}
+            stars={listAdvice.stars}
             comment={listAdvice.comment}
             key={i}
           ></Advice>

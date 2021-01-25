@@ -5,11 +5,8 @@ const initState = {
 }
 
 //Define Actions
-
-//Define Actions
 const starRangeReducer = (state = initState, action) => {
     switch (action.type) {
-            //Change bounds values
         case 'APPLY_NEW_RANGE':
             return {
                 ...state,

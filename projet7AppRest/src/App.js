@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import Aside from './components/Aside';
 import GeolocationModal from './components/GeolocationModal';
 import Map from './components/Map';
+import filterRestaurantLists from './actions/filteringRestaurant'
 import './App.css';
 import { useSelector } from 'react-redux';
 
 
 
-const restaurantLists = require('./DonneeTest.json'); // a placer tout en haut de la hierarchie
-
-
+ 
 
 
 function App(props) {
   // user location
+  const filteredRestaurantLists = filterRestaurantLists()
+  const restaurantLists = useSelector(state => state.restaurantList) // a placer tout en haut de la hierarchie
+
   const WatchPosition = () => {
     navigator.geolocation.watchPosition(function (position) {
       const lng = position.coords.longitude;
@@ -35,31 +35,34 @@ function App(props) {
     setDisplayModal(useDisplayModal = true)
   }
 
-  // hook manage currentPosition for map
+  // hook manage current user Position for map
   const [currentPosition, setCurrentPosition] = useState({ lat: 10, lng: 8 }); // état initial
   useEffect(() => {
-    // met à jour la position de l'utilisateur
     navigator.geolocation.watchPosition(function (position) {
       const lng = position.coords.longitude;
       const lat = position.coords.latitude;
       const newPosition = { lat: lat, lng: lng };
-      setCurrentPosition(newPosition);// nouvel état contenant lat/lng utilisateur
+      setCurrentPosition(newPosition);
     });
   }, [setCurrentPosition]);
 
 
   //Get bounds from mapLimitReducer
-  const userBounds = useSelector(state => state)
+  const userBounds = useSelector(state => state.userBounds.bounds)
+ // Get restaurant list from reducer
+ const restaurantListReducer = useSelector(state => state.restaurantListReducer)
 
   // Get if user wants return bests filtered restaurant list 
   const activeStarFilter = useSelector(state => state.activeFilterByStars)
-  console.log(activeStarFilter)
 
   // Get range of the filtered list
+  // const {minRange, maxRange} = useSelector(state => state.starRange);
   const minRange = useSelector(state => state.starRange.min);
   const maxRange = useSelector(state => state.starRange.max)
 
-  
+  // Get the new restaurant to add
+  const newRestaurantProperties = useSelector(state => state.newRestaurantProperties)
+  console.log(newRestaurantProperties)
 
   const calculateRestaurantStarAverage = (valuesStarsList) => {
       var b = valuesStarsList.length,
@@ -90,10 +93,10 @@ if (averageStar >= minRange && averageStar <= maxRange ) {
 
   const filterRestaurantLists = (userBounds, activeStarFilter, restaurantLists) => {
     const filteredRestaurantLists = [];
-    if (userBounds.userBounds.bounds !== undefined && userBounds.userBounds.bounds !== null && activeStarFilter === false) {
+    if (userBounds !== undefined && userBounds !== null && activeStarFilter === false) {
       restaurantLists.map((restaurantList, i) => {
-        if (restaurantList.lat <= userBounds.userBounds.bounds.ne.lat && restaurantList.lat >= userBounds.userBounds.bounds.se.lat) {
-          if (restaurantList.long <= userBounds.userBounds.bounds.ne.lng && restaurantList.long >= userBounds.userBounds.bounds.sw.lng) {
+        if (restaurantList.lat <= userBounds.ne.lat && restaurantList.lat >= userBounds.se.lat) {
+          if (restaurantList.long <= userBounds.ne.lng && restaurantList.long >= userBounds.sw.lng) {
           filteredRestaurantLists.push(restaurantList)
           console.log(activeStarFilter)
           
@@ -101,10 +104,10 @@ if (averageStar >= minRange && averageStar <= maxRange ) {
       }
       })
   }
-  if (userBounds.userBounds.bounds !== undefined && userBounds.userBounds.bounds !== null && activeStarFilter === true) {
+  if (userBounds !== undefined && userBounds !== null && activeStarFilter === true) {
     restaurantLists.map((restaurantList, i) => {
-      if (restaurantList.lat <= userBounds.userBounds.bounds.ne.lat && restaurantList.lat >= userBounds.userBounds.bounds.se.lat) {
-        if (restaurantList.long <= userBounds.userBounds.bounds.ne.lng && restaurantList.long >= userBounds.userBounds.bounds.sw.lng) {
+      if (restaurantList.lat <= userBounds.ne.lat && restaurantList.lat >= userBounds.se.lat) {
+        if (restaurantList.long <= userBounds.ne.lng && restaurantList.long >= userBounds.sw.lng) {
           filterByStars(restaurantList, filteredRestaurantLists)
         console.log(activeStarFilter)
         
@@ -119,14 +122,13 @@ if (averageStar >= minRange && averageStar <= maxRange ) {
 
 
 return (
-  <Container fluid id='App'>
-    <Row>
+<div>
       {WatchPosition()}
       {(useDisplayModal && <GeolocationModal></GeolocationModal>) || null}
-      <Map newPosition={currentPosition} > </Map>
-      <Aside restaurantLists={filterRestaurantLists(userBounds,activeStarFilter.activeFilterByStars, restaurantLists)} ></Aside>
-    </Row>
-  </Container>
+      <Map newPosition={currentPosition} starFilterIsActive={activeStarFilter} restaurantLists={filteredRestaurantLists(userBounds,activeStarFilter.activeFilterByStars, restaurantListReducer.restaurantLists)} > </Map>
+      <Aside restaurantLists={filteredRestaurantLists(userBounds,activeStarFilter.activeFilterByStars, restaurantListReducer.restaurantLists)} style={{zIndex:'5'}, {position:'absolute'}, {marginTop:'0px'}}  ></Aside>
+</div>
+
 );
 }
 

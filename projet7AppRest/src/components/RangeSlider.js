@@ -27,9 +27,9 @@ const RangeSlider = (props) => {
   const [checkboxIsActive, setCheckboxIsActive] = useState(activeStarFilter.activeFilterByStars) // valide et synchro à l'initialisation
   
   useEffect(() => {
-    setTimeout(() => {
+    
       setCheckboxIsActive(activeStarFilter.activeFilterByStars ? false : true);
-    })
+
   })
 
 

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {createStore} from 'redux';
@@ -10,7 +11,6 @@ import {Provider} from 'react-redux';
 import rootReducer from './reducers/rootReducer'
 
 const store = createStore(rootReducer);
-const restaurantLists = require('./DonneeTest.json');
 
 
 
@@ -18,7 +18,7 @@ ReactDOM.render(
   <React.StrictMode>
   <Provider store={store}>    
   {console.log(store)}
-    <App restaurantLists={restaurantLists} />
+    <App  />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
