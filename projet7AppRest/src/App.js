@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Aside from './components/Aside';
 import GeolocationModal from './components/GeolocationModal';
 import Map from './components/Map';
-import filterRestaurantLists from './actions/filteringRestaurant'
 import './App.css';
 import { useSelector } from 'react-redux';
 
@@ -13,7 +12,6 @@ import { useSelector } from 'react-redux';
 
 function App(props) {
   // user location
-  const filteredRestaurantLists = filterRestaurantLists()
   const restaurantLists = useSelector(state => state.restaurantList) // a placer tout en haut de la hierarchie
 
   const WatchPosition = () => {
@@ -125,8 +123,8 @@ return (
 <div>
       {WatchPosition()}
       {(useDisplayModal && <GeolocationModal></GeolocationModal>) || null}
-      <Map newPosition={currentPosition} starFilterIsActive={activeStarFilter} restaurantLists={filteredRestaurantLists(userBounds,activeStarFilter.activeFilterByStars, restaurantListReducer.restaurantLists)} > </Map>
-      <Aside restaurantLists={filteredRestaurantLists(userBounds,activeStarFilter.activeFilterByStars, restaurantListReducer.restaurantLists)} style={{zIndex:'5'}, {position:'absolute'}, {marginTop:'0px'}}  ></Aside>
+      <Map newPosition={currentPosition} starFilterIsActive={activeStarFilter} restaurantLists={filterRestaurantLists(userBounds,activeStarFilter.activeFilterByStars, restaurantListReducer.restaurantLists)} > </Map>
+      <Aside restaurantLists={filterRestaurantLists(userBounds,activeStarFilter.activeFilterByStars, restaurantListReducer.restaurantLists)} style={{zIndex:'5'}, {position:'absolute'}, {marginTop:'0px'}}  ></Aside>
 </div>
 
 );
