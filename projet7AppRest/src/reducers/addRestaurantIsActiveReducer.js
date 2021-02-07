@@ -4,8 +4,14 @@ const initState = {
 
 //Define Actions
 const addRestaurantIsActiveReducer = (state = initState, action) => {
+
     switch (action.type) {
             //Change bounds values
+        case 'CLICK_ON_ADD_RESTAURANT':
+            return {
+                ...state,
+                    addRestaurantIsActive: !state.addRestaurantIsActive  
+            }
         case 'ACTIVE_ADD_RESTAURANT':
             return {
                 ...state,

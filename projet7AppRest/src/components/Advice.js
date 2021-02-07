@@ -18,12 +18,11 @@ const Advice = (props) => {
     const starsArrays = displayStars(stars)
 
     return (<div className='advice'>
-{console.log(starsArrays)}
-{starsArrays.map((starsArray , i) => {
-    return (<FontAwesomeIcon icon={faStar} size="lg" color='gold' />)
- })}
+        {starsArrays.map((starsArray, i) => {
+            return (<FontAwesomeIcon key={i} icon={faStar} size="lg" color='gold' />)
+        })}
         <p> {props.stars}</p>
-        <p> {props.comment}</p>{displayStars(stars)}
+        <p> {props.comment}</p>
     </div>
     )
 }

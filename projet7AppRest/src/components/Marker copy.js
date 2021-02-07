@@ -40,8 +40,8 @@ const Marker = ({ contenu, userLat, userLng }) => {
   );
 
   if (contenu.lat !== userLat && contenu.long !== userLng) {
-    return (
-      <div className='restaurantMarker'  lat={contenu.lat} lng={contenu.lng}>
+    return (<div >
+      <div className='restaurantMarker'>
         <OverlayTrigger
           placement="right"
           delay={{ show: 100, hide: 100 }}
@@ -50,7 +50,7 @@ const Marker = ({ contenu, userLat, userLng }) => {
           <FontAwesomeIcon icon={faMapMarkerAlt} size="3x" onClick={handleClick} />
         </OverlayTrigger>
       </div>
-    
+    </div>
     )
   }
   else return (
@@ -58,7 +58,11 @@ const Marker = ({ contenu, userLat, userLng }) => {
       <div className='markerUser blob '></div>
     </div>
   )
-
+  /*fait la meme chose qu'au dessus -> fait par David
+    return (<div>
+      <CardRestaurant></CardRestaurant>
+      {isRestaurant ? <div onClick={handleClick} className='fa-beat'/> : <div className='markerUser blob ' />}
+     </div>)*/
 }
 
 export default Marker;

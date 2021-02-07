@@ -34,18 +34,9 @@ function Aside(props) {
   const activeStarFilter = useSelector(state => state.activeFilterByStars)
   console.log(activeStarFilter)
 
-
   const dispatch = useDispatch();
-  // hooks manage addRestaurantButton 
-  let [useAddRestaurantIsActive, setAddRestaurantIsActive] = useState(false);
   const activeButton = () => {
-    setAddRestaurantIsActive(!useAddRestaurantIsActive);
-    if (useAddRestaurantIsActive === false) {
-      dispatch({ type: 'ACTIVE_ADD_RESTAURANT' })
-    }
-    if (useAddRestaurantIsActive === true) {
-      dispatch({ type: 'DISABLE_ADD_RESTAURANT' })
-    }
+    dispatch({ type: 'CLICK_ON_ADD_RESTAURANT' })
   }
 
   
@@ -64,8 +55,9 @@ function Aside(props) {
       <Row>
 
         <div className={useHideAside ? " slide-right col-3  " : " slide-left col-3 "} >
-          <div className='col-lg-12 row  '>
-            <div className='col-lg-11 aside '>
+          <div className='col-lg-12   '>
+          <Row>
+            <div className='col-lg-10 aside '>
               <Row>
                 <div className='col-lg-10'>
                   <h3 > tittle + logo</h3>
@@ -74,7 +66,7 @@ function Aside(props) {
                 <div className='col-lg-1'><h3 className='chevronAside' onClick={(activeHideAside)}> {<FontAwesomeIcon icon={faAngleLeft} size="lg" />}</h3> </div><hr />
               </Row>
 
-              <div className='starFilter'>
+              <div className='starFilter col-12'>
                 <hr />
                 <Form.Check type="checkbox" label="Filtrer les restaurants par note" onClick={() => { activeCheckbox() }} />
                 <hr />
@@ -83,7 +75,7 @@ function Aside(props) {
               </div>
               <AsideInfoBox restaurantLists={props.restaurantLists} ></AsideInfoBox>
             </div>
-            <div className='col-lg-1 '>
+            <div className='col-2' >
               <OverlayTrigger
                 placement="right"
                 delay={{ show: 100, hide: 100 }}
@@ -93,7 +85,7 @@ function Aside(props) {
               </OverlayTrigger>
 
             </div>
-
+</Row>
           </div>
         </div>
       </Row>

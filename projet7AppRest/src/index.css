@@ -68,19 +68,10 @@ height: 100%;
   position: absolute;
   z-index: 1;
   margin-top:  5px;
-float: left;
-
-}
-
-.blocAside {
-  position: relative;
-  z-index: 20;
-  background-color: red;
 }
 
 .aside {
   margin-top: -15px;
-position: absolute;
   height: 100vh;
   padding: 15px;
   z-index: 1;
@@ -107,21 +98,23 @@ border-radius: 5px;
 }
 
 
-.marker{
-  color: white;
-  height: 50px;
-  width: 50px;
-  padding: 15px 10px;
-  display: inline-flex;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  border-radius: 100%;
-  transform: translate(-50%, -50%);
 
-}
+
 
 .markerUser{
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  padding: 10px 10px;
+  text-align: center;
+  align-items: center;
+  border-radius: 100%;
+  transform: translate(-50%, -50%);
+  background-image: url("./components/img/markerUser.svg");
+  z-index: 10;
+
+}
+.markerUser2{
   position: absolute;
   height: 40px;
   width: 40px;
@@ -131,27 +124,69 @@ border-radius: 5px;
   justify-content: center;
   border-radius: 100%;
   transform: translate(-50%, -50%);
-  background-image: url("./components/img/markerUser.svg");
+  background-image: url("./components/img/markerRestaurant.svg");
   z-index: 10;
 
 }
 
-.markerRestaurant{ 
-  height: 40px;
-  width: 40px;
-  padding: 15px 10px;
-  position: absolute;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  border-radius: 100%;
-  transform: translate(-50%, -50%);
-  
-  background-image: url("./components/img/markerRestaurant.svg");
 
+
+.restaurantMarker {
+  cursor: pointer;
+  color:  rgba(0, 195, 255, 1);
+
+  position: absolute;
+}
+
+.restaurantMarker:hover {
+  cursor: pointer;
+  color: rgb(20, 220, 103);
+  position: absolute;
+}
+.selectedRestaurant{
+  -webkit-box-shadow: inset 0px 0px 1px 2px rgba(124, 227, 253,1);
+  -moz-box-shadow: inset 0px 0px 1px 2px rgba(124, 227, 253,1);
+  box-shadow: inset 0px 0px 1px 2px rgb(124, 227, 253);
 }
 
 
+
+
+.tooltip-inner{
+  background-color:rgba(245, 245, 245, 0.87);
+  color: #3b3F42;
+}
+
+
+
+.fa-beat {
+  cursor: pointer;
+  animation:fa-beat 3s ease infinite;
+  color: crimson;
+  text-align: center;
+  transform-origin: bottom ;
+  position: absolute;
+}
+@keyframes fa-beat {
+  0% {
+    transform:scale(1);
+  }
+  25% {
+    transform:scale(1.25);
+  }
+  50% {
+    transform:scale(1);
+  }
+ 
+  75% {
+    transfor:scale(1.25);
+
+  }
+  100% {
+    transform:scale(1);
+  }
+
+}
 
 .blob {
 	border-radius: 50%;
@@ -254,10 +289,4 @@ border-radius: 5px;
     -webkit-transform: translateX(-300px);
             transform: translateX(-300px);
   }
-}
-
-.buttonAddRestaurant :active {
-  color: pink;
-  background-color:rebeccapurple ;
-
 }

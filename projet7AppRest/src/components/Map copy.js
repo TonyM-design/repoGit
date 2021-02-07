@@ -3,7 +3,7 @@ import GoogleMapReact from 'google-map-react';
 import { useDispatch, useSelector } from 'react-redux';
 import Marker from './Marker';
 import AddRestaurantCard from './AddRestaurantCard';
-import MarkerRestaurantDisplay from './MarkerRestaurantDisplay'
+import AddRatingCard from './AddRatingCard';
 
 
 const Map = (props) => {
@@ -76,8 +76,18 @@ const Map = (props) => {
                     }
                     }>
                     <Marker key={'user'} lat={lat} lng={lng} contenu={'Vous êtes ici'}></Marker>
-                    <MarkerRestaurantDisplay  contenu ={props}></MarkerRestaurantDisplay>
 
+                    {
+                        props.restaurantLists.map((restaurantList, i) => {
+                            return (
+                                <div key={i + 'b'} style={{ position: 'absolute', zIndex: '100', borderRadius: '5px' }} lat={restaurantList.lat} lng={restaurantList.long}>
+                                    <Marker key={i} lat={restaurantList.lat} lng={restaurantList.long} contenu={restaurantList} />
+                                    {addRatingIsActive && selectedRestaurant.restaurantName === restaurantList.restaurantName ? 
+                                        <AddRatingCard key={i + 'a'} content={restaurantList} > </AddRatingCard> : null
+                                             }
+
+                                </div>)
+                    })}
                 </GoogleMapReact>
             )
             }
