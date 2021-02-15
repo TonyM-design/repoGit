@@ -32,7 +32,6 @@ function Aside(props) {
   }
 
   const activeStarFilter = useSelector(state => state.activeFilterByStars)
-  console.log(activeStarFilter)
 
   const dispatch = useDispatch();
   const activeButton = () => {

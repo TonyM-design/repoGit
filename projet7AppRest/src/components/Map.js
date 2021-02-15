@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { useDispatch, useSelector } from 'react-redux';
-import Marker from './Marker';
 import AddRestaurantCard from './AddRestaurantCard';
-import MarkerRestaurantDisplay from './MarkerRestaurantDisplay'
-
+import MarkerUser from './MarkerUser';
+import MarkerRestaurant from './MarkerRestaurant'
+import AddRatingCard from './AddRatingCard';
 
 const Map = (props) => {
     const lat = props.newPosition.lat;
@@ -20,10 +20,11 @@ const Map = (props) => {
         })
     }
     // REDUX
-    const restaurantLists = useSelector(state => state.restaurantListReducer)
+    const restaurantLists = useSelector(state => state.restaurantListReducer.restaurantLists)
     const { addRatingIsActive } = useSelector(state => state.addRatingIsActive)
     const { addRestaurantIsActive } = useSelector(state => state.addRestaurant);
     const { selectedRestaurant } = useSelector(state => state.selectedRestaurant);
+
     const dispatch = useDispatch();
     const getUserBounds = (bounds) => {
         let userBounds = {
@@ -43,13 +44,15 @@ const Map = (props) => {
     const getMousePosition = () => {
         return (mousePosition)
     }
+
+
+
     const [addingNewRestaurant, setAddingNewRestaurant] = useState(false);
     const AddNewRestaurant = () => {
         if (addRestaurantIsActive === true) {
             window.addEventListener("click", updateMousePosition, { once: true });
             getMousePosition()
             setAddingNewRestaurant(true)
-            console.log('addNewRestaurant')
             return true
         }
         else if (addRestaurantIsActive === false) {
@@ -57,6 +60,7 @@ const Map = (props) => {
             return false
         }
     }
+
     return (
         <div style={{ height: '100vh', width: '100%', opacity: '85%', zIndex: '0', position: 'absolute' }}>
             {lat && (
@@ -75,12 +79,32 @@ const Map = (props) => {
                         dispatch({ type: 'ON_CHANGE_BOUNDS', payload: bounds });
                     }
                     }>
-                    <Marker key={'user'} lat={lat} lng={lng} contenu={'Vous êtes ici'}></Marker>
-                    <MarkerRestaurantDisplay  contenu ={props}></MarkerRestaurantDisplay>
+                    <MarkerUser key='user' lat={lat} lng={lng}></MarkerUser>
+
+
+                    {restaurantLists.map((restaurantList) => (
+                        <MarkerRestaurant
+                            key={restaurantLists.indexOf(restaurantList)}
+                            lat={restaurantList.lat}
+                            lng={restaurantList.long}
+                            contenu={restaurantList}
+                        >
+
+                        </MarkerRestaurant>
+                    ))}
+
+                    {addRatingIsActive ? <AddRatingCard className='col-2'
+                        lat={selectedRestaurant.lat}
+                        lng={selectedRestaurant.long}
+                        content={restaurantLists}
+                    >
+                    </AddRatingCard> : null}
+
 
                 </GoogleMapReact>
             )
             }
+
 
             {(addRestaurantIsActive && addingNewRestaurant ? <div className='col-2' style={{ position: 'absolute', zIndex: '100', top: mousePosition.y, left: mousePosition.x, borderRadius: '5px' }}>
                 <AddRestaurantCard latLng={clickLatLng} > </AddRestaurantCard>

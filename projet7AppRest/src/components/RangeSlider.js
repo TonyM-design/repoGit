@@ -11,10 +11,8 @@ const RangeSlider = (props) => {
 
   // recupere l'état de la checkBox dans le reducer 
     const activeStarFilter = useSelector(state => state.activeFilterByStars)
-    console.log(activeStarFilter)
 
   function log(value) {
-    console.log(value); //eslint-disable-line
     setcurrentRange(value)
     const minValue= value[0]
     const maxValue= value[1]

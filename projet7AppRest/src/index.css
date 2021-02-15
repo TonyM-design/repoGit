@@ -80,7 +80,13 @@ height: 100%;
 
 }
 
+.chevronAside{
+  cursor: pointer;
+}
+.chevronAside:hover{
+  color:#17A2B8
 
+}
 
 .asideInfoElementList{
 background-color: rgba(255, 255, 255, 0.418);
@@ -134,8 +140,12 @@ border-radius: 5px;
 .restaurantMarker {
   cursor: pointer;
   color:  rgba(0, 195, 255, 1);
-
   position: absolute;
+
+  top: "100%";
+  left: "50%";
+  transform: "translate(-50%, -100%)"
+  
 }
 
 .restaurantMarker:hover {

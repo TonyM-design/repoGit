@@ -1,3 +1,4 @@
+
 const initState = 
 {
     restaurantLists:require('../DonneeTest.json')
@@ -13,18 +14,18 @@ const restaurantListReducers = (state = initState, action) => {
                 ...state,
                 restaurantLists: [...state.restaurantLists, action.payload.newRestaurantProperties]
             }
-       // case 'SEND_NEW_RATING':
-            // action.payload
-            // stars: inputRestaurantStar.val,
-            // comment: inputRestaurantComment.val,
-            // restaurantId: content.restaurantId,
-            // boucler sur ta liste de restaurant pour trouver le restaurant avec le même ID
-            // push un object {starts, comment}
-          //  const nouvelleListRestaurant = state.restaurantList.map();
-          //  return {
-         //       ...state,
-         //       restaurantList:
-         //   }
+        case 'SEND_NEW_RATING':
+            const {restaurantName, comment, stars} = action.payload.newRestaurantRating; // stars: parseInt(inputRestaurantStar.val) comment: inputRestaurantComment.val restaurantName: selectedRestaurant.restaurantName,
+
+           return {
+                ...state,
+               restaurantLists: state.restaurantLists.map((restaurant) => {
+                if (restaurant.restaurantName === restaurantName) {
+                 return {...restaurant, ratings: [...restaurant.ratings, {stars, comment}]};
+                }
+                return {...restaurant};
+            })
+           }
 
         default:
             return state

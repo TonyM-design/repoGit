@@ -14,7 +14,6 @@ function AsideInfoBox(props) {
 
   const selectOnAside = (restaurantList, props) => {
         dispatch({ type: 'SELECT_RESTAURANT', payload: restaurantList})
-        console.log(props)
   }
 
 

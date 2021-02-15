@@ -12,7 +12,7 @@ const addRatingIsActive = (state = initState, action) => {
                 addRatingIsActive: !state.addRatingIsActive  
             }
 
-        case 'ACTIVE_ADD_RATING':
+      /*  case 'ACTIVE_ADD_RATING':
             return {
                 ...state,
                 addRatingIsActive: true  
@@ -22,7 +22,7 @@ const addRatingIsActive = (state = initState, action) => {
                 return {
                     ...state,
                     addRatingIsActive: false  
-                }
+                }*/
        
         default:
             return state

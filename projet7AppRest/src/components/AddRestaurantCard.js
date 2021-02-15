@@ -30,7 +30,6 @@ const AddRestaurantCard = (props) => {
                 ratings: [],
             }
             dispatch({ type: 'ADD_ITEM', payload: {newRestaurantProperties} })
-            dispatch({ type: 'SEND_NEW_RESTAURANT', payload: {newRestaurantProperties} })
             dispatch({ type: 'CLICK_ON_ADD_RESTAURANT' })
         }
     }
