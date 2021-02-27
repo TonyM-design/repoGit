@@ -32,24 +32,27 @@ const AddRatingCard = (content) => {
             dispatch({ type: 'UNSELECT_RESTAURANT' })
         }
     }
+    //
 
     return (
         <Form style={{ position: 'absolute', backgroundColor: ' rgba(255, 255, 255, 0.781)', marginTop: '40px', marginLeft: '20px', padding: '15px', zIndex: '100', borderRadius: '5px', width: '30vh' }} noValidate validated={validated} onSubmit={sendNewRestaurantRatings} >
             <Form.Group >
                 <Form.Label>Commentaire</Form.Label>
-                <Form.Control required type="text" placeholder="Entrez votre commentaire" onChange={e => setinputRestaurantComment({ val: e.target.value })} rows={5} />
+                <Form.Control required type="text" placeholder="Entrez votre commentaire"  rows={5}  onChange={e => setinputRestaurantComment({ val: e.target.value })}  />
                 <Form.Control.Feedback type="invalid">
-                    Veuillez entrer un commentaire.
-          </Form.Control.Feedback>
+                    <Feedback>Veuillez entrer un commentaire.</Feedback>
+                </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group  controlId="exampleForm.ControlSelect1">
+
+            <Form.Group controlId="exampleForm.ControlSelect1">
                 <Form.Label>Choisissez une note</Form.Label>
                 <Form.Control required as="select" type="select" onChange={e => setinputRestaurantStar({ val: e.target.value })}>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                    <option value="">Selectionnez une note</option>
+                    <option value={'1'}>1</option>
+                    <option value={'2'}>2</option>
+                    <option value={'3'}>3</option>
+                    <option value={'4'}>4</option>
+                    <option value={'5'}>5</option>
                 </Form.Control>
             </Form.Group>
 

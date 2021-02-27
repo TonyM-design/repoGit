@@ -10,20 +10,60 @@ const Map = (props) => {
     const lat = props.newPosition.lat;
     const lng = props.newPosition.lng;
     const [clickLatLng, setClickLatLng] = useState({ lat: null, lng: null });
+    const [mapMapsService, setMapMapsService] = useState( {map:null, maps:null})
+    const [googleService, setGoogleService] = useState (null)
+    const [googleBounds, setGoogleBounds] = useState({ ne: null, sw: null }); 
+
     //ACCESS ON GOOGLE MAP API 
     const handleApiLoaded = (map, maps) => {
-        // Configure the click listener.
+        if (googleBounds.sw !== null) {
+            setMapMapsService({map: map, maps: maps})
+            const googleServiceTest =  new maps.places.PlacesService(map);
+            setGoogleService(googleServiceTest)
+        }
+
+        // Configure the click listener
         map.addListener("click", (mapsMouseEvent) => {
             var latitude = mapsMouseEvent.latLng.lat();
             var longitude = mapsMouseEvent.latLng.lng();
             setClickLatLng({ latitude, longitude })
         })
     }
+
+
+    const findNearbyRestaurant = (mapMapsService) => {
+        console.log(mapMapsService)
+        if (mapMapsService.maps !== null && mapMapsService !== undefined){
+        const service =new mapMapsService.maps.places.PlacesService(mapMapsService.map);
+        console.log(service) ///////////////////////////////////////////////////////
+        let test = { sw: googleBounds.ne, ne: googleBounds.sw } 
+        console.log(test) // valide
+
+        let request = {
+            bounds: test,
+            type: ['restaurant']
+        };
+        function callbackFindNearbyRestaurant(results, status)  {
+            console.log('test POUET !')
+            if (status == mapMapsService.maps.places.PlacesServiceStatus.OK) {
+                for (var i = 0; i < results.length; i++) {
+                  console.log(results[i]);
+                }
+              }
+        service.nearbySearch(request, callbackFindNearbyRestaurant);
+            }
+}
+    }
+
+
+
     // REDUX
     const restaurantLists = useSelector(state => state.restaurantListReducer.restaurantLists)
     const { addRatingIsActive } = useSelector(state => state.addRatingIsActive)
     const { addRestaurantIsActive } = useSelector(state => state.addRestaurant);
     const { selectedRestaurant } = useSelector(state => state.selectedRestaurant);
+    const userBounds = useSelector(state => state.userBounds)
+
 
     const dispatch = useDispatch();
     const getUserBounds = (bounds) => {
@@ -36,6 +76,7 @@ const Map = (props) => {
         dispatch({ type: 'ON_CHANGE_BOUNDS', payload: userBounds });
     }
     // FIN REDUX
+
     // MOUSE POSITION 
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0, });
     const updateMousePosition = ev => {
@@ -63,10 +104,14 @@ const Map = (props) => {
 
     return (
         <div style={{ height: '100vh', width: '100%', opacity: '85%', zIndex: '0', position: 'absolute' }}>
+
             {lat && (
                 <GoogleMapReact
                     key={1}
-                    bootstrapURLKeys={{ key: "AIzaSyCN5UCQGiOHjAI4_RCdZ-2Yuug2-4JYTzs" }}
+                    bootstrapURLKeys={{
+                        key: "AIzaSyCN5UCQGiOHjAI4_RCdZ-2Yuug2-4JYTzs",
+                        libraries: ['places'] // chargement de la library place / https://github.com/google-map-react/google-map-react/blob/HEAD/API.md / voir fin page
+                    }}
                     defaultCenter={[lat, lng]}
                     defaultZoom={16}
                     onClick={AddNewRestaurant}
@@ -77,6 +122,13 @@ const Map = (props) => {
                     onChange={({ bounds }) => {
                         getUserBounds(bounds)
                         dispatch({ type: 'ON_CHANGE_BOUNDS', payload: bounds });
+                        setGoogleBounds( {ne: bounds.ne, sw: bounds.sw})
+                        if (mapMapsService.maps !== null && mapMapsService!== undefined){
+                        findNearbyRestaurant(mapMapsService)
+                        console.log(mapMapsService) ///////////////////////////////////////////////////////////////////////////////////////////////////
+                        }
+            
+
                     }
                     }>
                     <MarkerUser key='user' lat={lat} lng={lng}></MarkerUser>
@@ -104,7 +156,6 @@ const Map = (props) => {
                 </GoogleMapReact>
             )
             }
-
 
             {(addRestaurantIsActive && addingNewRestaurant ? <div className='col-2' style={{ position: 'absolute', zIndex: '100', top: mousePosition.y, left: mousePosition.x, borderRadius: '5px' }}>
                 <AddRestaurantCard latLng={clickLatLng} > </AddRestaurantCard>
