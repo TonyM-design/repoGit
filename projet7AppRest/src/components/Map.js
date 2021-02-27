@@ -50,8 +50,9 @@ const Map = (props) => {
                   console.log(results[i]);
                 }
               }
-        service.nearbySearch(request, callbackFindNearbyRestaurant);
+        
             }
+            service.nearbySearch(request, callbackFindNearbyRestaurant);
 }
     }
 
