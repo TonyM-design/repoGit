@@ -10,15 +10,15 @@ const Map = (props) => {
     const lat = props.newPosition.lat;
     const lng = props.newPosition.lng;
     const [clickLatLng, setClickLatLng] = useState({ lat: null, lng: null });
-    const [mapMapsService, setMapMapsService] = useState( {map:null, maps:null})
-    const [googleService, setGoogleService] = useState (null)
-    const [googleBounds, setGoogleBounds] = useState({ ne: null, sw: null }); 
+    const [mapMapsService, setMapMapsService] = useState({ map: null, maps: null })
+    const [googleService, setGoogleService] = useState(null)
+    const [googleBounds, setGoogleBounds] = useState({ east: null, north: null, south: null, west: null });
 
     //ACCESS ON GOOGLE MAP API 
     const handleApiLoaded = (map, maps) => {
         if (googleBounds.sw !== null) {
-            setMapMapsService({map: map, maps: maps})
-            const googleServiceTest =  new maps.places.PlacesService(map);
+            setMapMapsService({ map: map, maps: maps })
+            const googleServiceTest = new maps.places.PlacesService(map);
             setGoogleService(googleServiceTest)
         }
 
@@ -31,30 +31,6 @@ const Map = (props) => {
     }
 
 
-    const findNearbyRestaurant = (mapMapsService) => {
-        console.log(mapMapsService)
-        if (mapMapsService.maps !== null && mapMapsService !== undefined){
-        const service =new mapMapsService.maps.places.PlacesService(mapMapsService.map);
-        console.log(service) ///////////////////////////////////////////////////////
-        let test = { sw: googleBounds.ne, ne: googleBounds.sw } 
-        console.log(test) // valide
-
-        let request = {
-            bounds: test,
-            type: ['restaurant']
-        };
-        function callbackFindNearbyRestaurant(results, status)  {
-            console.log('test POUET !')
-            if (status == mapMapsService.maps.places.PlacesServiceStatus.OK) {
-                for (var i = 0; i < results.length; i++) {
-                  console.log(results[i]);
-                }
-              }
-        
-            }
-            service.nearbySearch(request, callbackFindNearbyRestaurant);
-}
-    }
 
 
 
@@ -64,7 +40,6 @@ const Map = (props) => {
     const { addRestaurantIsActive } = useSelector(state => state.addRestaurant);
     const { selectedRestaurant } = useSelector(state => state.selectedRestaurant);
     const userBounds = useSelector(state => state.userBounds)
-
 
     const dispatch = useDispatch();
     const getUserBounds = (bounds) => {
@@ -76,6 +51,75 @@ const Map = (props) => {
         }
         dispatch({ type: 'ON_CHANGE_BOUNDS', payload: userBounds });
     }
+
+
+    const getMoreDetails = (resultNearbyRestaurant, mapMapsService) => {
+        const service = new mapMapsService.maps.places.PlacesService(mapMapsService.map);
+        var request = {
+            placeId: resultNearbyRestaurant.place_id,
+            fields: ['name', 'rating', 'review']
+        };
+        service.getDetails(request, callback);
+        let ratings = []
+        function callback(place, status) {
+            if (status === mapMapsService.maps.places.PlacesServiceStatus.OK) {
+                const importedReviews = place.reviews
+                let newImportRating = null
+                if (importedReviews !== null && importedReviews !== undefined) {
+                    importedReviews.map((importedReview, i) => (
+                        newImportRating = { stars: importedReview.rating, comment: importedReview.text }, // VALIDE
+                        ratings.push(newImportRating)// VALIDE
+                    ))
+                }
+                console.log(ratings) // ratings semble bon
+            }
+           
+        } return ratings
+    }
+
+    const findNearbyRestaurant = (mapMapsService) => {
+        if (mapMapsService.maps !== null && mapMapsService !== undefined) {
+            const service = new mapMapsService.maps.places.PlacesService(mapMapsService.map);
+            const boundsForGoogle = { east: googleBounds.east, north: googleBounds.north, south: googleBounds.south, west: googleBounds.west }
+
+
+            let request = {
+                location: {lat, lng},
+                radius: '2500',
+                type: ['restaurant']
+            };
+            function callbackFindNearbyRestaurant(results, status) {
+                if (status == mapMapsService.maps.places.PlacesServiceStatus.OK) {
+                    for (var i = 0; i < results.length; i++) {
+                        const ratingsFromGoogle = getMoreDetails(results[i], mapMapsService)
+                        const newRestaurantProperties = {
+                            restaurantName: results[i].name,
+                            adresse: results[i].vicinity,
+                            lat: results[i].geometry.location.lat(),
+                            long: results[i].geometry.location.lng(),
+                            ratings: ratingsFromGoogle
+                        }
+                        dispatch({ type: 'ADD_ITEM', payload: { newRestaurantProperties } })
+
+                     /*   const newImportedRestaurantFromGoogle = {
+                            restaurantName: results[i].name,
+                            adresse: results[i].vicinity,
+                            lat: results[i].geometry.location.lat(),
+                            long: results[i].geometry.location.lng(),
+                            ratings: ratingsFromGoogle
+                        }*/
+                       // console.log(newImportedRestaurantFromGoogle)                      
+                    /*  if ( newImportedRestaurantFromGoogle.lat !== null && newImportedRestaurantFromGoogle.lat !== undefined) {
+                          dispatch({ type: 'ADD_ITEM', payload: {newImportedRestaurantFromGoogle} })
+                        } */
+
+                    }
+                }
+
+            }
+            service.nearbySearch(request, callbackFindNearbyRestaurant);
+        }
+    }
     // FIN REDUX
 
     // MOUSE POSITION 
@@ -86,8 +130,6 @@ const Map = (props) => {
     const getMousePosition = () => {
         return (mousePosition)
     }
-
-
 
     const [addingNewRestaurant, setAddingNewRestaurant] = useState(false);
     const AddNewRestaurant = () => {
@@ -111,10 +153,10 @@ const Map = (props) => {
                     key={1}
                     bootstrapURLKeys={{
                         key: "AIzaSyCN5UCQGiOHjAI4_RCdZ-2Yuug2-4JYTzs",
-                        libraries: ['places'] // chargement de la library place / https://github.com/google-map-react/google-map-react/blob/HEAD/API.md / voir fin page
+                        libraries: ['places']
                     }}
                     defaultCenter={[lat, lng]}
-                    defaultZoom={16}
+                    defaultZoom={18}
                     onClick={AddNewRestaurant}
                     onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
                     center={{ lat, lng }}
@@ -123,18 +165,13 @@ const Map = (props) => {
                     onChange={({ bounds }) => {
                         getUserBounds(bounds)
                         dispatch({ type: 'ON_CHANGE_BOUNDS', payload: bounds });
-                        setGoogleBounds( {ne: bounds.ne, sw: bounds.sw})
-                        if (mapMapsService.maps !== null && mapMapsService!== undefined){
-                        findNearbyRestaurant(mapMapsService)
-                        console.log(mapMapsService) ///////////////////////////////////////////////////////////////////////////////////////////////////
+                        setGoogleBounds({ east: bounds.ne.lng, north: bounds.ne.lat, south: bounds.sw.lat, west: bounds.sw.lng })
+                        if (mapMapsService.maps !== null && mapMapsService !== undefined) {
+                            findNearbyRestaurant(mapMapsService)
                         }
-            
-
                     }
                     }>
                     <MarkerUser key='user' lat={lat} lng={lng}></MarkerUser>
-
-
                     {restaurantLists.map((restaurantList) => (
                         <MarkerRestaurant
                             key={restaurantLists.indexOf(restaurantList)}
@@ -142,18 +179,14 @@ const Map = (props) => {
                             lng={restaurantList.long}
                             contenu={restaurantList}
                         >
-
                         </MarkerRestaurant>
                     ))}
-
                     {addRatingIsActive ? <AddRatingCard className='col-2'
                         lat={selectedRestaurant.lat}
                         lng={selectedRestaurant.long}
                         content={restaurantLists}
                     >
                     </AddRatingCard> : null}
-
-
                 </GoogleMapReact>
             )
             }
