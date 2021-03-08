@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+
 const AddRestaurantCard = (props) => {
     const [inputRestaurantName, setInputRestaurantName] = useState(null);
     const [inputRestaurantAdress, setInputRestaurantAdress] = useState(null);

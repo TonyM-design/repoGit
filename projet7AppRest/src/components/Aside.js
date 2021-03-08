@@ -53,16 +53,16 @@ function Aside(props) {
 
       <Row>
 
-        <div className={useHideAside ? " slide-right col-3  " : " slide-left col-3 "} >
-          <div className='col-lg-12   '>
+        <div className={useHideAside ? " slide-right col-lg-3 col-sm-12  " : " slide-left col-lg-3 col-sm-12 "} >
+          <div className='col-12   '>
           <Row>
-            <div className='col-lg-10 aside '>
+            <div className='col-10 aside '>
               <Row>
-                <div className='col-lg-10'>
+                <div className='col-10'>
                   <h3 > tittle + logo</h3>
                 </div>
 
-                <div className='col-lg-1'><h3 className='chevronAside' onClick={(activeHideAside)}> {<FontAwesomeIcon icon={faAngleLeft} size="lg" />}</h3> </div><hr />
+                <div className='col-1'><h3 className='chevronAside' onClick={(activeHideAside)}> {<FontAwesomeIcon icon={faAngleLeft} size="lg" />}</h3> </div><hr />
               </Row>
 
               <div className='starFilter col-12'>

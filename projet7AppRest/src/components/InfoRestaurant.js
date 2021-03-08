@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 const Inforestaurants = (props) => {
     const lat = props.restaurantList.lat;
     const lng = props.restaurantList.long
-console.log(props)
     const createStreetViewLink = (lat, lng) => {
         let streetViewLink = `https://maps.googleapis.com/maps/api/streetview?size=400x400&location=${lat},${lng}&fov=80&heading=70&pitch=0&key=AIzaSyCN5UCQGiOHjAI4_RCdZ-2Yuug2-4JYTzs`
         return (streetViewLink)

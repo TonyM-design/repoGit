@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -9,6 +9,8 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 const MarkerRestaurant = ({ contenu }) => {
   const dispatch = useDispatch()
+  const { selectedRestaurant } = useSelector(state => state.selectedRestaurant);
+
 
   const calculateRestaurantStarAverage = (valuesStarsList) => {
     var b = valuesStarsList.length,
@@ -25,7 +27,9 @@ const MarkerRestaurant = ({ contenu }) => {
       valuesStarsList.push(rating.stars)
     })
     const averageStar = calculateRestaurantStarAverage(valuesStarsList)
-    return (averageStar)
+    return (
+      isNaN(averageStar) ? "Aucun avis" : averageStar
+      )
   }
 
   function handleClick() {
@@ -40,11 +44,15 @@ const MarkerRestaurant = ({ contenu }) => {
   );
 
 
-
-
+const isSelected = (selectedRestaurant,contenu) => {
+  if (selectedRestaurant !== null && (selectedRestaurant.restaurantName === contenu.restaurantName)){
+    return 'selectedRestaurantMarker'
+  }
+  else return 'restaurantMarker'
+}
 
   return (
-    <div className='restaurantMarker'>
+    <div className= {isSelected(selectedRestaurant,contenu)}>
        <OverlayTrigger
           placement="right"
           delay={{ show: 100, hide: 100 }}

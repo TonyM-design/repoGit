@@ -120,26 +120,13 @@ border-radius: 5px;
   z-index: 10;
 
 }
-.markerUser2{
-  position: absolute;
-  height: 40px;
-  width: 40px;
-  padding: 10px 10px;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  border-radius: 100%;
-  transform: translate(-50%, -50%);
-  background-image: url("./components/img/markerRestaurant.svg");
-  z-index: 10;
 
-}
 
 
 
 .restaurantMarker {
   cursor: pointer;
-  color:  rgba(0, 195, 255, 1);
+  color:  #17A2B8;
   position: absolute;
 
   top: "100%";
@@ -150,13 +137,129 @@ border-radius: 5px;
 
 .restaurantMarker:hover {
   cursor: pointer;
-  color: rgb(20, 220, 103);
+  color: rgba(22, 244, 229, 0.996);
   position: absolute;
 }
 .selectedRestaurant{
   -webkit-box-shadow: inset 0px 0px 1px 2px rgba(124, 227, 253,1);
   -moz-box-shadow: inset 0px 0px 1px 2px rgba(124, 227, 253,1);
   box-shadow: inset 0px 0px 1px 2px rgb(124, 227, 253);
+}
+.selectedRestaurantMarker{
+  cursor: pointer;
+  color: rgba(22, 244, 229, 0.996);
+  position: absolute;
+  top: "100%";
+  left: "50%";
+  transform: "translate(-50%, -100%)";
+  -webkit-animation: bounce-top 1.5s both;
+	        animation: bounce-top 1.5s both;
+          z-index: 1000;
+}
+
+@-webkit-keyframes bounce-top {
+  0% {
+    -webkit-transform: translateY(-25px);
+            transform: translateY(-25px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    opacity: 1;
+  }
+  24% {
+    opacity: 1;
+  }
+  40% {
+    -webkit-transform: translateY(-18px);
+            transform: translateY(-18px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  65% {
+    -webkit-transform: translateY(-10px);
+            transform: translateY(-10px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  82% {
+    -webkit-transform: translateY(-6px);
+            transform: translateY(-6px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  93% {
+    -webkit-transform: translateY(-4px);
+            transform: translateY(-4px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  25%,
+  55%,
+  75%,
+  87% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+  100% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+    opacity: 1;
+  }
+}
+@keyframes bounce-top {
+  0% {
+    -webkit-transform: translateY(-25px);
+            transform: translateY(-25px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    opacity: 1;
+  }
+  24% {
+    opacity: 1;
+  }
+  40% {
+    -webkit-transform: translateY(-18px);
+            transform: translateY(-18px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  65% {
+    -webkit-transform: translateY(-10px);
+            transform: translateY(-10px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  82% {
+    -webkit-transform: translateY(-6px);
+            transform: translateY(-6px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  93% {
+    -webkit-transform: translateY(-4px);
+            transform: translateY(-4px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  25%,
+  55%,
+  75%,
+  87% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+  100% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+    opacity: 1;
+  }
 }
 
 
