@@ -38,9 +38,9 @@ const FilteredRestaurantLists = () => {
 
   const filterRestaurantLists = (userBounds, activeStarFilter, restaurantLists) => {
     const filteredRestaurantLists = [];
-    if (userBounds !== undefined && userBounds !== null && activeStarFilter === false) {
+    if (userBounds !== undefined && userBounds !== null && activeStarFilter === false ) {
       restaurantLists.map((restaurantList, i) => {
-        if (restaurantList.lat <= userBounds.ne.lat && restaurantList.lat >= userBounds.se.lat) {
+        if ( restaurantList.lat <= userBounds.ne.lat && restaurantList.lat >= userBounds.se.lat) {
           if (restaurantList.long <= userBounds.ne.lng && restaurantList.long >= userBounds.sw.lng) {
             filteredRestaurantLists.push(restaurantList)
 

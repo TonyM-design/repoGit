@@ -7,7 +7,7 @@ const AdvicesDisplay = (ratings) => {
   
     return (
       <div className='advicesBox'>
-        {listAdvices.map((listAdvice, i) => (
+        {listAdvices && listAdvices.map((listAdvice, i) => (
           <Advice 
             stars={listAdvice.stars}
             comment={listAdvice.comment}

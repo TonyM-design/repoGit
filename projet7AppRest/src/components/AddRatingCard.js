@@ -1,66 +1,95 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Feedback from 'react-bootstrap/Feedback'
-
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 const AddRatingCard = (content) => {
     const { selectedRestaurant } = useSelector(state => state.selectedRestaurant)
-
-    // manage form 
-    const [inputRestaurantComment, setinputRestaurantComment] = useState(null);
-    const [inputRestaurantStar, setinputRestaurantStar] = useState(null);
-    const [validated, setValidated] = useState(false);
     //  end manage form 
     const dispatch = useDispatch()
 
-    const sendNewRestaurantRatings = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        const form = event.currentTarget;
-        if (form.checkValidity() === true) {
-            setValidated(true);
-
-            const newRestaurantRating = {
-                stars: parseInt(inputRestaurantStar.val),
-                comment: inputRestaurantComment.val,
-                restaurantName: selectedRestaurant.restaurantName,
-            }
-            dispatch({ type: 'SEND_NEW_RATING', payload: { newRestaurantRating } })
-            dispatch({ type: 'CLICK_ADD_RATING' })
-            dispatch({ type: 'UNSELECT_RESTAURANT' })
-        }
-    }
-    //
+    const validationSchema = Yup.object().shape({
+        comment: Yup.string()
+            .min(10, "*Un commentaire doit comporter au moins dix caractères")
+            .required("*Un commentaire est obligatoire"),
+        rating: Yup.string()
+            .required("*Une note est obligatoire"),
+    });
 
     return (
-        <Form style={{ position: 'absolute', backgroundColor: ' rgba(255, 255, 255, 0.781)', marginTop: '40px', marginLeft: '20px', padding: '15px', zIndex: '100', borderRadius: '5px', width: '30vh' }} noValidate validated={validated} onSubmit={sendNewRestaurantRatings} >
-            <Form.Group >
-                <Form.Label>Commentaire</Form.Label>
-                <Form.Control required type="text" placeholder="Entrez votre commentaire"  rows={5}  onChange={e => setinputRestaurantComment({ val: e.target.value })}  />
-                <Form.Control.Feedback type="invalid">
-                    <Feedback>Veuillez entrer un commentaire.</Feedback>
-                </Form.Control.Feedback>
-            </Form.Group>
+        <Formik initialValues={{ comment: "", rating: "" }}
+            validationSchema={validationSchema}
+            onSubmit={(values, { setSubmitting, resetForm }) => {
+                setSubmitting(true);
+                const newRestaurantRating = {
+                    comment: values.comment,
+                    stars: parseInt(values.rating),
+                    restaurantName: selectedRestaurant.restaurantName,
+                }
+                dispatch({ type: 'SEND_NEW_RATING', payload: { newRestaurantRating } })
+                dispatch({ type: 'CLICK_ADD_RATING' })
+                dispatch({ type: 'UNSELECT_RESTAURANT' })
+            }}
+        >
 
-            <Form.Group controlId="exampleForm.ControlSelect1">
-                <Form.Label>Choisissez une note</Form.Label>
-                <Form.Control required as="select" type="select" onChange={e => setinputRestaurantStar({ val: e.target.value })}>
-                    <option value="">Selectionnez une note</option>
-                    <option value={'1'}>1</option>
-                    <option value={'2'}>2</option>
-                    <option value={'3'}>3</option>
-                    <option value={'4'}>4</option>
-                    <option value={'5'}>5</option>
-                </Form.Control>
-            </Form.Group>
+            {({ values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting
+            }) => (
+                <Form onSubmit={handleSubmit} className="mx-auto" style={{ position: 'absolute', backgroundColor: ' rgba(255, 255, 255, 0.781)', marginTop: '40px', marginLeft: '20px', padding: '15px', zIndex: '100', borderRadius: '5px', width: '30vh' }}>
+                    <Form.Group controlId="formComment">
+                        <Form.Label>Commentaire :</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="comment"
+                            placeholder="Commentaire"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.comment}
+                            className={touched.comment && errors.comment ? "has-error" : null}
+                        />
+                        {touched.comment && errors.comment ? (
+                            <div className="error-message">{errors.comment}</div>
+                        ) : null}
+                    </Form.Group>
 
-            <Button type="submit" variant="success">
-                Valider
-            </Button>
-        </Form>
+                    <Form.Group controlId="formRating">
+                        <Form.Label>Choisissez une note :</Form.Label>
+                        <Form.Control as ='select'
+                            type="select"
+                            name="rating"
+                            placeholder="Selectionnez une note "
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.rating}
+                            className={touched.rating && errors.rating ? "has-error" : null}
+                        >
+                           <option value="">Selectionnez une note</option>
+                            <option value={'1'}>1</option>
+                            <option value={'2'}>2</option>
+                            <option value={'3'}>3</option>
+                            <option value={'4'}>4</option>
+                            <option value={'5'}>5</option>
+                        </Form.Control>
+                        {touched.rating && errors.rating ? (
+                            <div className="error-message">{errors.rating}</div>
+                        ) : null}
+                    </Form.Group>
+
+
+                    {/*Submit button that is disabled after button is clicked/form is in the process of submitting*/}
+                    <Button variant="info" type="submit" disabled={isSubmitting}>
+                        Valider
+          </Button>
+                </Form>
+            )}
+        </Formik>
     )
 }
-
 export default AddRatingCard

@@ -5,7 +5,8 @@ import AddRestaurantCard from './AddRestaurantCard';
 import MarkerUser from './MarkerUser';
 import MarkerRestaurant from './MarkerRestaurant'
 import AddRatingCard from './AddRatingCard';
-import FilteredRestaurantLists from './FilteringRestaurant';
+import GetNearbyRestaurantAndRatings from './GetNearbyRestaurants';
+import throttle from './ThrottleFunction'
 
 
 const Map = (props) => {
@@ -32,14 +33,11 @@ const Map = (props) => {
 
     // REDUX
     const restaurantLists = useSelector(state => state.restaurantListReducer.restaurantLists)
-    const activeFilterByStar = useSelector(state => state.activeFilterByStar)
     const { addRatingIsActive } = useSelector(state => state.addRatingIsActive)
     const { addRestaurantIsActive } = useSelector(state => state.addRestaurant);
     const { selectedRestaurant } = useSelector(state => state.selectedRestaurant);
     const [googleBounds, setGoogleBounds] = useState({ east: null, north: null, south: null, west: null });
-    const userBounds = useSelector(state => state.userBounds)
     const dispatch = useDispatch();
-
 
     // userBounds 
     const getUserBounds = (bounds) => {
@@ -52,60 +50,6 @@ const Map = (props) => {
         dispatch({ type: 'ON_CHANGE_BOUNDS', payload: userBounds });
         setGoogleBounds({ east: bounds.ne.lng, north: bounds.ne.lat, south: bounds.sw.lat, west: bounds.sw.lng })
 
-    }
-
-
-    const getMoreDetails = (resultNearbyRestaurant, mapMapsService) => {
-        const service = new mapMapsService.maps.places.PlacesService(mapMapsService.map);
-        var request = {
-            placeId: resultNearbyRestaurant.place_id,
-            fields: ['name', 'rating', 'review']
-        };
-        service.getDetails(request, callback);
-        let ratings = []
-        function callback(place, status) {
-            if (status === mapMapsService.maps.places.PlacesServiceStatus.OK) {
-                const importedReviews = place.reviews
-                let newImportRating = null
-                if (importedReviews !== null && importedReviews !== undefined) {
-                    importedReviews.map((importedReview, i) => (
-                        newImportRating = { stars: importedReview.rating, comment: importedReview.text }, // VALIDE
-                        ratings.push(newImportRating)// VALIDE
-                    ))
-                }
-            }
-        } return ratings
-    }
-
-    const findNearbyRestaurant = (mapMapsService) => {
-        if (mapMapsService.maps !== null && mapMapsService !== undefined) {
-            const service = new mapMapsService.maps.places.PlacesService(mapMapsService.map);
-
-            let request = {
-                bounds: googleBounds,
-                type: ['restaurant']
-            };
-            function callbackFindNearbyRestaurant(results, status) {
-                if (status == mapMapsService.maps.places.PlacesServiceStatus.OK) {
-                    for (var i = 0; i < results.length; i++) {
-                        const ratingsFromGoogle = getMoreDetails(results[i], mapMapsService)
-                        const newRestaurantProperties = {
-                            restaurantName: results[i].name,
-                            adresse: results[i].vicinity,
-                            lat: results[i].geometry.location.lat(),
-                            long: results[i].geometry.location.lng(),
-                            ratings: ratingsFromGoogle
-                        }
-                        const resultat = restaurantLists.find(restaurant => restaurant.restaurantName === newRestaurantProperties.restaurantName);
-                        if (resultat === undefined) {
-                            dispatch({ type: 'ADD_ITEM', payload: { newRestaurantProperties } })
-                        }
-                    }
-                }
-
-            }
-            service.nearbySearch(request, callbackFindNearbyRestaurant);
-        }
     }
     // FIN REDUX
 
@@ -132,6 +76,15 @@ const Map = (props) => {
         }
     }
 
+    const displayMarkers = async (mapMapsService, googleBounds) => {
+        const newRestaurants = await GetNearbyRestaurantAndRatings(mapMapsService, googleBounds);
+          for (const newRestaurant of newRestaurants) {
+              const resultat = restaurantLists.find(restaurant => restaurant.restaurantName === newRestaurant.restaurantName);
+              if (resultat === undefined) {
+              dispatch({ type: 'ADD_ITEM', payload:  {newRestaurant}  })
+          }
+        }
+      }
 
     return (
         <div style={{ height: '100vh', width: '100%', opacity: '85%', zIndex: '0', position: 'absolute' }}>
@@ -145,7 +98,7 @@ const Map = (props) => {
                     }}
                     defaultCenter={[lat, lng]}
                     defaultZoom={15}
-                    minZoom={14}
+                    minZoom={15}
                     onClick={AddNewRestaurant}
                     onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
                     center={{ lat, lng }}
@@ -154,10 +107,9 @@ const Map = (props) => {
                     onChange={({ bounds }) => {
                         getUserBounds(bounds)
                         dispatch({ type: 'ON_CHANGE_BOUNDS', payload: bounds });
-                        if (mapMapsService.maps !== null && mapMapsService !== undefined) {
-                            findNearbyRestaurant(mapMapsService)
-                        }
-                    }
+                        if (mapMapsService !== undefined && mapMapsService.maps !== null) {
+                            throttle(displayMarkers(mapMapsService, googleBounds), 2000)
+                        }}
                     }>
                     <MarkerUser key='user' lat={lat} lng={lng}></MarkerUser>
                     {filteredList.map((elem) => (
