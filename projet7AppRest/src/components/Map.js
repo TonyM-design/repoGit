@@ -79,11 +79,9 @@ const Map = (props) => {
     const displayMarkers = async (mapMapsService, googleBounds) => {
         const newRestaurants = await GetNearbyRestaurantAndRatings(mapMapsService, googleBounds);
           for (const newRestaurant of newRestaurants) {
-              const resultat = restaurantLists.find(restaurant => restaurant.restaurantName === newRestaurant.restaurantName);
-              if (resultat === undefined) {
-              dispatch({ type: 'ADD_ITEM', payload:  {newRestaurant}  })
+               dispatch({ type: 'ADD_ITEM', payload:  {newRestaurant}  })
           }
-        }
+        
       }
 
     return (
