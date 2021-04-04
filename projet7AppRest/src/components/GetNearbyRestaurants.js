@@ -33,13 +33,10 @@ const findNearbyRestaurant = async (mapMapsService, googleBounds) => {
         service.nearbySearch(request, callbackSearch);
         
         function callbackSearch(results, status) {
-            console.log(status)
             if (status === mapMapsService.maps.places.PlacesServiceStatus.OK) {
-                console.log(results)
                 resolve(results);
             }
             else { 
-                console.log("PlaceServiceStatus error");
                 resolve([])
             }
         }

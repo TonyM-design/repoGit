@@ -98,7 +98,6 @@ const Map = (props) => {
                     options={{ draggableCursor: addRestaurantIsActive ? 'crosshair' : 'grab', minZoom: 14 }}
                     yesIWantToUseGoogleMapApiInternals
                     onChange={  ({ bounds }) => {
-                        console.log('ON CHANGE.....')
                          sendCurrentBounds(bounds)
                         if (mapMapsService !== undefined && mapMapsService.maps !== null) {
                             displayMarkers(mapMapsService, transformGoogleBounds(bounds));
