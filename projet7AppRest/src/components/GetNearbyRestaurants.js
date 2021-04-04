@@ -1,4 +1,4 @@
-const GetNearbyRestaurantAndRatings = async (mapMapsService, googleBounds) => {
+const getNearbyRestaurantAndRatings = async (mapMapsService, googleBounds) => {
     const findedRestaurants = await findNearbyRestaurant(mapMapsService, googleBounds);
     const restaurantsToReturnList = []
     for (const findedRestaurant of findedRestaurants) {
@@ -15,23 +15,35 @@ const GetNearbyRestaurantAndRatings = async (mapMapsService, googleBounds) => {
 }
 
 const findNearbyRestaurant = async (mapMapsService, googleBounds) => {
+    if (mapMapsService === undefined || mapMapsService.maps === undefined || mapMapsService.map === undefined) {
+        console.error('')
+        return [];
+     }
+
     const service = new mapMapsService.maps.places.PlacesService(mapMapsService.map);
-    if (service.maps !== null && service !== undefined) {
-        return new Promise((resolve) => {
-            let request = {
-                bounds: googleBounds,
-                type: ['restaurant']
-            }
-            service.nearbySearch(request, callbackSearch);
-            function callbackSearch(results, status) {
-                if (status == mapMapsService.maps.places.PlacesServiceStatus.OK) {
-                    resolve(results);
-                    return results
-                }
-                else { console.log("PlaceServiceStatus error") }
-            }
-        })
+    if (service === undefined) {
+        return [];
     }
+
+    return new Promise((resolve) => {
+        let request = {
+            bounds: googleBounds,
+            type: ['restaurant']
+        }
+        service.nearbySearch(request, callbackSearch);
+        
+        function callbackSearch(results, status) {
+            console.log(status)
+            if (status === mapMapsService.maps.places.PlacesServiceStatus.OK) {
+                console.log(results)
+                resolve(results);
+            }
+            else { 
+                console.log("PlaceServiceStatus error");
+                resolve([])
+            }
+        }
+    })
 }
 
 const findRatingsByRestaurant = async (mapMapsService, findedRestaurant) => {
@@ -53,12 +65,12 @@ const findRatingsByRestaurant = async (mapMapsService, findedRestaurant) => {
                             newImportRating = { stars: importedReview.rating, comment: importedReview.text },
                             ratings.push(newImportRating)
                         ))
+                        return resolve(ratings)
                     }
                 }
+                resolve([]);
             }
-            resolve(ratings)
-            return ratings
         })
     }
 }
-export default GetNearbyRestaurantAndRatings;
+export default getNearbyRestaurantAndRatings;

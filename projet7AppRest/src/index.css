@@ -268,6 +268,9 @@ border-radius: 5px;
 .tooltip-inner{
   background-color:rgba(245, 245, 245, 0.87);
   color: #3b3F42;
+  -webkit-box-shadow: 2px 2px 8px 0px rgba(50, 50, 50, 0.45);
+  -moz-box-shadow:    2px 2px 8px 0px rgba(50, 50, 50, 0.45);
+  box-shadow:         2px 2px 8px 0px rgba(50, 50, 50, 0.45);
 }
 
 

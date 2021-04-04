@@ -12,18 +12,6 @@ const addRatingIsActive = (state = initState, action) => {
                 addRatingIsActive: !state.addRatingIsActive  
             }
 
-      /*  case 'ACTIVE_ADD_RATING':
-            return {
-                ...state,
-                addRatingIsActive: true  
-            }
-
-            case 'DISABLE_ADD_RATING':
-                return {
-                    ...state,
-                    addRatingIsActive: false  
-                }*/
-       
         default:
             return state
     }

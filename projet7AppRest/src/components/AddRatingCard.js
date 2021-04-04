@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-const AddRatingCard = (content) => {
+const AddRatingCard = () => {
     const { selectedRestaurant } = useSelector(state => state.selectedRestaurant)
     //  end manage form 
     const dispatch = useDispatch()
@@ -82,8 +82,6 @@ const AddRatingCard = (content) => {
                         ) : null}
                     </Form.Group>
 
-
-                    {/*Submit button that is disabled after button is clicked/form is in the process of submitting*/}
                     <Button variant="info" type="submit" disabled={isSubmitting}>
                         Valider
           </Button>

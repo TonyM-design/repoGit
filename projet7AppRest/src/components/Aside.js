@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AsideInfoBox from './AsideInfoBox';
 import { Form } from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
 import RangeSlider from './RangeSlider'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -30,8 +29,6 @@ function Aside(props) {
       dispatch({ type: 'DISABLE_FILTER_BY_STAR' })
     }
   }
-
-  const activeStarFilter = useSelector(state => state.activeFilterByStars)
 
   const dispatch = useDispatch();
   const activeButton = () => {

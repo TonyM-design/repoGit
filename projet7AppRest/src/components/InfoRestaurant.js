@@ -12,22 +12,20 @@ const Inforestaurants = (props) => {
         return (streetViewLink)
     }
 
-const localSelectedRestaurant = props.restaurantList
-
+    const localSelectedRestaurant = props.restaurantList
     const dispatch = useDispatch()
     const ratingIsActive = () => {
         dispatch({ type: 'CLICK_ADD_RATING' })
-        dispatch({ type: 'SELECT_RESTAURANT', payload: localSelectedRestaurant})
-
+        dispatch({ type: 'SELECT_RESTAURANT', payload: localSelectedRestaurant })
     }
 
-    const restaurantLists =  useSelector(state => state.restaurantListReducer)
+    const restaurantLists = useSelector(state => state.restaurantListReducer)
     return (
         <div className='asideInfoElementList'>
             <h4>{props.restaurantList.restaurantName}</h4>
             <p> {props.restaurantList.address}</p>
 
-            <img style ={{width:'100%'}} src={createStreetViewLink(lat, lng)}></img>
+            <img style={{ width: '100%' }} src={createStreetViewLink(lat, lng)}></img>
 
             {AdvicesDisplay(props.restaurantList.ratings)}
             <hr></hr>

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 
@@ -64,6 +63,5 @@ const FilteredRestaurantLists = () => {
   return (filterRestaurantLists(userBounds, activeStarFilter.activeFilterByStars, restaurantListReducer.restaurantLists))
 
 }
-
 
 export default FilteredRestaurantLists

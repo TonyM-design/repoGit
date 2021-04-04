@@ -11,7 +11,6 @@ const MarkerRestaurant = ({ contenu }) => {
   const dispatch = useDispatch()
   const { selectedRestaurant } = useSelector(state => state.selectedRestaurant);
 
-
   const calculateRestaurantStarAverage = (valuesStarsList) => {
     var b = valuesStarsList.length,
       c = 0, i;
@@ -42,7 +41,6 @@ const MarkerRestaurant = ({ contenu }) => {
       <b>{contenu.restaurantName} | {averageStar(contenu)} <FontAwesomeIcon icon={faStar} style={{ justifySelf: 'auto' }} size="1x" color='gold' /></b> 
     </Tooltip>
   );
-
 
 const isSelected = (selectedRestaurant,contenu) => {
   if (selectedRestaurant !== null && (selectedRestaurant.restaurantName === contenu.restaurantName)){

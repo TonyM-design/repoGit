@@ -5,8 +5,7 @@ import AddRestaurantCard from './AddRestaurantCard';
 import MarkerUser from './MarkerUser';
 import MarkerRestaurant from './MarkerRestaurant'
 import AddRatingCard from './AddRatingCard';
-import GetNearbyRestaurantAndRatings from './GetNearbyRestaurants';
-import throttle from './ThrottleFunction'
+import getNearbyRestaurantAndRatings from './GetNearbyRestaurants';
 
 
 const Map = (props) => {
@@ -15,13 +14,30 @@ const Map = (props) => {
     const lng = props.newPosition.lng;
     const [clickLatLng, setClickLatLng] = useState({ lat: null, lng: null });
     const [mapMapsService, setMapMapsService] = useState({ map: null, maps: null })
-    const [googleService, setGoogleService] = useState(null)
+
+     // REDUX
+     const { addRatingIsActive } = useSelector(state => state.addRatingIsActive)
+    // const { userPosition } = useSelector(state => state.userPosition)
+     const { addRestaurantIsActive } = useSelector(state => state.addRestaurant);
+     const { selectedRestaurant } = useSelector(state => state.selectedRestaurant);
+     const [googleBounds, setGoogleBounds] = useState({ east: null, north: null, south: null, west: null }); 
+     const dispatch = useDispatch();
+ 
+
+     const transformGoogleBounds = (bounds) =>({ east: bounds.ne.lng, north: bounds.ne.lat, south: bounds.sw.lat, west: bounds.sw.lng }); 
+
+
+     // userBounds 
+     const sendCurrentBounds = (bounds) => {
+         dispatch({ type: 'ON_CHANGE_BOUNDS', payload: bounds });
+         setGoogleBounds(transformGoogleBounds(bounds))
+     }
+     // FIN REDUX
+
 
     //ACCESS ON GOOGLE MAP API 
-    const handleApiLoaded = (map, maps) => {
-        setMapMapsService({ map: map, maps: maps })
-        const googleServiceTest = new maps.places.PlacesService(map);
-        setGoogleService(googleServiceTest)
+    const handleApiLoaded = async (map, maps) => {
+         setMapMapsService({ map: map, maps: maps })
 
         // Configure the click listener
         map.addListener("click", (mapsMouseEvent) => {
@@ -30,29 +46,6 @@ const Map = (props) => {
             setClickLatLng({ latitude, longitude })
         })
     }
-
-    // REDUX
-    const restaurantLists = useSelector(state => state.restaurantListReducer.restaurantLists)
-    const { addRatingIsActive } = useSelector(state => state.addRatingIsActive)
-    const { addRestaurantIsActive } = useSelector(state => state.addRestaurant);
-    const { selectedRestaurant } = useSelector(state => state.selectedRestaurant);
-    const [googleBounds, setGoogleBounds] = useState({ east: null, north: null, south: null, west: null });
-    const dispatch = useDispatch();
-
-    // userBounds 
-    const getUserBounds = (bounds) => {
-        let userBounds = {
-            ne: bounds.ne,
-            nw: bounds.nw,
-            se: bounds.se,
-            sw: bounds.sw
-        }
-        dispatch({ type: 'ON_CHANGE_BOUNDS', payload: userBounds });
-        setGoogleBounds({ east: bounds.ne.lng, north: bounds.ne.lat, south: bounds.sw.lat, west: bounds.sw.lng })
-
-    }
-    // FIN REDUX
-
     // MOUSE POSITION 
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0, });
     const updateMousePosition = ev => {
@@ -61,6 +54,7 @@ const Map = (props) => {
     const getMousePosition = () => {
         return (mousePosition)
     }
+
 
     const [addingNewRestaurant, setAddingNewRestaurant] = useState(false);
     const AddNewRestaurant = () => {
@@ -76,13 +70,14 @@ const Map = (props) => {
         }
     }
 
-    const displayMarkers = async (mapMapsService, googleBounds) => {
-        const newRestaurants = await GetNearbyRestaurantAndRatings(mapMapsService, googleBounds);
+    const displayMarkers = async (mapMapsService, boundsMap) => {
+        const newRestaurants = await getNearbyRestaurantAndRatings(mapMapsService, boundsMap);
+
           for (const newRestaurant of newRestaurants) {
                dispatch({ type: 'ADD_ITEM', payload:  {newRestaurant}  })
           }
-        
       }
+
 
     return (
         <div style={{ height: '100vh', width: '100%', opacity: '85%', zIndex: '0', position: 'absolute' }}>
@@ -98,18 +93,19 @@ const Map = (props) => {
                     defaultZoom={15}
                     minZoom={15}
                     onClick={AddNewRestaurant}
-                    onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+                    onGoogleApiLoaded={({ map, maps }) => {handleApiLoaded(map, maps)}}
                     center={{ lat, lng }}
                     options={{ draggableCursor: addRestaurantIsActive ? 'crosshair' : 'grab', minZoom: 14 }}
                     yesIWantToUseGoogleMapApiInternals
-                    onChange={({ bounds }) => {
-                        getUserBounds(bounds)
-                        dispatch({ type: 'ON_CHANGE_BOUNDS', payload: bounds });
+                    onChange={  ({ bounds }) => {
+                        console.log('ON CHANGE.....')
+                         sendCurrentBounds(bounds)
                         if (mapMapsService !== undefined && mapMapsService.maps !== null) {
-                            throttle(displayMarkers(mapMapsService, googleBounds), 2000)
+                            displayMarkers(mapMapsService, transformGoogleBounds(bounds));
                         }}
                     }>
                     <MarkerUser key='user' lat={lat} lng={lng}></MarkerUser>
+
                     {filteredList.map((elem) => (
                         <MarkerRestaurant
                             key={filteredList.indexOf(elem)}
@@ -123,13 +119,11 @@ const Map = (props) => {
                     {addRatingIsActive ? <AddRatingCard className='col-2'
                         lat={selectedRestaurant.lat}
                         lng={selectedRestaurant.long}
-                        content={restaurantLists}
                     >
                     </AddRatingCard> : null}
                 </GoogleMapReact>
             )
             }
-
             {(addRestaurantIsActive && addingNewRestaurant ? <div className='col-2' style={{ position: 'absolute', zIndex: '100', top: mousePosition.y, left: mousePosition.x, borderRadius: '5px' }}>
                 <AddRestaurantCard latLng={clickLatLng} > </AddRestaurantCard>
             </div> : null)

@@ -18,8 +18,8 @@
     {
        "restaurantName":"La Pizzeria",
        "address":"4 Rue Lamarck, 75018 Paris",
-       "lat":45.916625, 
-       "long":3.647497,
+       "lat":44.91370, 
+       "long":-0.6355679999999999,
        "ratings":[
           {
              "stars":5,

@@ -4,25 +4,16 @@ const initState =
     restaurantLists: require('../DonneeTest.json')
 }
 
-
-//Define Actions
 const restaurantListReducers = (state = initState, action) => {
-    const tests = state.restaurantLists
-
+    const displayedRestaurants = state.restaurantLists
     switch (action.type) {
         case 'ADD_ITEM':
-           console.log(action.payload.newRestaurant.restaurantName)
-           console.log(state)
-           const resultat = tests.find(restaurant => restaurant.restaurantName === action.payload.newRestaurant.restaurantName); //RETOURNE TOUJOURS UNDEFINED ERREUR ICI
+           const resultat = displayedRestaurants.find(restaurant => restaurant.restaurantName === action.payload.newRestaurant.restaurantName); 
                 if (resultat === undefined) {
-                    console.log(resultat)
-
                 return {
-
                 ...state,
                 restaurantLists: [...state.restaurantLists, action.payload.newRestaurant]
             }} 
-        
         case 'SEND_NEW_RATING':
             if (action.payload.newRestaurantRating !== undefined){
             const { restaurantName, comment, stars } = action.payload.newRestaurantRating;
@@ -40,5 +31,4 @@ const restaurantListReducers = (state = initState, action) => {
             return state
     }
 }
-
 export default restaurantListReducers;

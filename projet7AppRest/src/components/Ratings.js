@@ -9,9 +9,6 @@ function Ratings(props) {
           </div>
          
       );
-      
-
-
     }
 
 

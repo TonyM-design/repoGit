@@ -17,8 +17,6 @@ const rootReducer = combineReducers({
     restaurantListReducer: restaurantListReducers,
     addRatingIsActive : addRatingIsActiveReducer,
     selectedRestaurant : selectedRestaurantReducer,
-   
-
 })
 
 export default rootReducer
