@@ -7,7 +7,6 @@ import * as Yup from 'yup';
 
 const AddRatingCard = () => {
     const { selectedRestaurant } = useSelector(state => state.selectedRestaurant)
-    //  end manage form 
     const dispatch = useDispatch()
 
     const validationSchema = Yup.object().shape({
@@ -33,7 +32,6 @@ const AddRatingCard = () => {
                 dispatch({ type: 'UNSELECT_RESTAURANT' })
             }}
         >
-
             {({ values,
                 errors,
                 touched,
@@ -61,7 +59,7 @@ const AddRatingCard = () => {
 
                     <Form.Group controlId="formRating">
                         <Form.Label>Choisissez une note :</Form.Label>
-                        <Form.Control as ='select'
+                        <Form.Control as='select'
                             type="select"
                             name="rating"
                             placeholder="Selectionnez une note "
@@ -70,7 +68,7 @@ const AddRatingCard = () => {
                             value={values.rating}
                             className={touched.rating && errors.rating ? "has-error" : null}
                         >
-                           <option value="">Selectionnez une note</option>
+                            <option value="">Selectionnez une note</option>
                             <option value={'1'}>1</option>
                             <option value={'2'}>2</option>
                             <option value={'3'}>3</option>

@@ -7,7 +7,6 @@ import MarkerRestaurant from './MarkerRestaurant'
 import AddRatingCard from './AddRatingCard';
 import getNearbyRestaurantAndRatings from './GetNearbyRestaurants';
 
-
 const Map = (props) => {
     const filteredList = props.restaurantLists
     const lat = props.newPosition.lat;
@@ -17,22 +16,15 @@ const Map = (props) => {
 
      // REDUX
      const { addRatingIsActive } = useSelector(state => state.addRatingIsActive)
-    // const { userPosition } = useSelector(state => state.userPosition)
      const { addRestaurantIsActive } = useSelector(state => state.addRestaurant);
      const { selectedRestaurant } = useSelector(state => state.selectedRestaurant);
-     const [googleBounds, setGoogleBounds] = useState({ east: null, north: null, south: null, west: null }); 
      const dispatch = useDispatch();
- 
-
-     const transformGoogleBounds = (bounds) =>({ east: bounds.ne.lng, north: bounds.ne.lat, south: bounds.sw.lat, west: bounds.sw.lng }); 
-
-
      // userBounds 
      const sendCurrentBounds = (bounds) => {
          dispatch({ type: 'ON_CHANGE_BOUNDS', payload: bounds });
-         setGoogleBounds(transformGoogleBounds(bounds))
      }
      // FIN REDUX
+     const transformGoogleBounds = (bounds) =>({ east: bounds.ne.lng, north: bounds.ne.lat, south: bounds.sw.lat, west: bounds.sw.lng }); 
 
 
     //ACCESS ON GOOGLE MAP API 
@@ -78,9 +70,34 @@ const Map = (props) => {
           }
       }
 
+/*
+* create css style to set the map height explicitly, it can't be in css file
+* see doc at : https://github.com/google-map-react/google-map-react
+*/
+      const manageResponsiveDisplay = () => {
+        if (window.matchMedia("(min-width: 769px)").matches) {
+          const responsiveDisplay = {
+              height:'100vh',
+              width: '100%', 
+              opacity: '85%', 
+              zIndex: '0', 
+              position: 'absolute',
+          } 
+          return responsiveDisplay 
+          } else {
+            const responsiveDisplay = {
+                height:'60vh',
+                width: '100%', 
+                opacity: '85%', 
+                zIndex: '0', 
+                position: 'relative',
+          }
+          return responsiveDisplay 
+      }
+    }
 
     return (
-        <div style={{ height: '100vh', width: '100%', opacity: '85%', zIndex: '0', position: 'absolute' }}>
+        <div style={manageResponsiveDisplay()}>
 
             {lat && (
                 <GoogleMapReact

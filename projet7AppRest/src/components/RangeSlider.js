@@ -12,22 +12,20 @@ const RangeSlider = (props) => {
   const activeStarFilter = useSelector(state => state.activeFilterByStars)
 
   function log(value) {
-    setcurrentRange(value)
     const minValue = value[0]
     const maxValue = value[1]
     dispatch({ type: 'APPLY_NEW_RANGE', payload: { min: minValue, max: maxValue } });
 
   }
 
-  const [currentRange, setcurrentRange] = useState({ minValue: 1, maxValue: 5 }); // état initial
 
-  const [checkboxIsActive, setCheckboxIsActive] = useState(activeStarFilter.activeFilterByStars) // valide et synchro à l'initialisation
+  const [checkboxIsActive, setCheckboxIsActive] = useState(activeStarFilter.activeFilterByStars) 
 
   useEffect(() => {
 
     setCheckboxIsActive(activeStarFilter.activeFilterByStars ? false : true);
 
-  })
+  }, [activeStarFilter])
 
 
   return (

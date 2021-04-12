@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Aside from './components/Aside';
 import GeolocationModal from './components/GeolocationModal';
 import Map from './components/Map';
-import './App.css';
 import FilteredRestaurantLists from './components/FilteringRestaurant';
 
-function App(props) {  
+function App() {  
     // user location
   const WatchPosition = () => {
     navigator.geolocation.watchPosition(function (position) {
@@ -26,8 +25,8 @@ function App(props) {
     setDisplayModal(useDisplayModal = true)
   }
  
- // hook manage current user Position for map // clone dans reducer
-  const [currentPosition, setCurrentPosition] = useState({ lat: 44.91, lng: -0.5 }); // état initial
+ // hook manage current user Position for map
+  const [currentPosition, setCurrentPosition] = useState({ lat: 44.91, lng: -0.5 }); 
   useEffect(() => {
     navigator.geolocation.watchPosition(function (position) {
       const lng = position.coords.longitude;
@@ -37,15 +36,12 @@ function App(props) {
     });
   }, [setCurrentPosition]); 
 
-
 return (
 <div>
       {WatchPosition()}
       {(useDisplayModal && <GeolocationModal></GeolocationModal>) || null}
-   
-
       <Map newPosition={currentPosition} restaurantLists={FilteredRestaurantLists()} > </Map>
-      <Aside restaurantLists={FilteredRestaurantLists()} style={{zIndex:'5', position:'absolute', marginTop:'0px'}}  ></Aside>
+      <Aside restaurantLists={FilteredRestaurantLists()}  ></Aside>
 </div>
 );
 }

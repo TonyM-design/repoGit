@@ -1,5 +1,23 @@
+/**
+ * It is the constant value of `google.maps.places.PlacesServiceStatus.OK`
+ * cf: https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesServiceStatus.OK
+ */
+const placeServiceStatusOK = 'OK';
+
 const getNearbyRestaurantAndRatings = async (mapMapsService, googleBounds) => {
-    const findedRestaurants = await findNearbyRestaurant(mapMapsService, googleBounds);
+    if (mapMapsService === undefined || mapMapsService.maps === undefined || mapMapsService.map === undefined) {
+        console.warn("mapMapsService error")
+        return [];
+    }
+
+    const placesService = new mapMapsService.maps.places.PlacesService(mapMapsService.map);
+    if (placesService === undefined) {
+        console.warn("PlaceService error")
+
+        return [];
+    }
+
+    const findedRestaurants = await findNearbyRestaurant(placesService, googleBounds);
     const restaurantsToReturnList = []
     for (const findedRestaurant of findedRestaurants) {
         const newRestaurant = {
@@ -7,67 +25,60 @@ const getNearbyRestaurantAndRatings = async (mapMapsService, googleBounds) => {
             adresse: findedRestaurant.vicinity,
             lat: findedRestaurant.geometry.location.lat(),
             long: findedRestaurant.geometry.location.lng(),
-            ratings: await findRatingsByRestaurant(mapMapsService, findedRestaurant)
+            ratings: await findRatingsByRestaurant(placesService, findedRestaurant)
         }
         restaurantsToReturnList.push(newRestaurant)
     }
     return restaurantsToReturnList;
 }
 
-const findNearbyRestaurant = async (mapMapsService, googleBounds) => {
-    if (mapMapsService === undefined || mapMapsService.maps === undefined || mapMapsService.map === undefined) {
-        console.error('')
-        return [];
-     }
-
-    const service = new mapMapsService.maps.places.PlacesService(mapMapsService.map);
-    if (service === undefined) {
-        return [];
-    }
-
+const findNearbyRestaurant = async (placesService, googleBounds) => {
     return new Promise((resolve) => {
         let request = {
             bounds: googleBounds,
             type: ['restaurant']
         }
-        service.nearbySearch(request, callbackSearch);
-        
+        placesService.nearbySearch(request, callbackSearch);
+
         function callbackSearch(results, status) {
-            if (status === mapMapsService.maps.places.PlacesServiceStatus.OK) {
+
+            if (status === placeServiceStatusOK) {
                 resolve(results);
             }
-            else { 
+            else {
+                console.warn(`PlaceServiceStatus error status must be ${placeServiceStatusOK} but received ${status}`)
+
                 resolve([])
             }
         }
     })
 }
 
-const findRatingsByRestaurant = async (mapMapsService, findedRestaurant) => {
-    const service = new mapMapsService.maps.places.PlacesService(mapMapsService.map);
-    if (service.maps !== null && service !== undefined) {
-        return new Promise((resolve) => {
-            let request = {
-                placeId: findedRestaurant.place_id,
-                fields: ['name', 'rating', 'review']
-            };
-            service.getDetails(request, callback);
-            let ratings = []
-            function callback(place, status) {
-                if (status == mapMapsService.maps.places.PlacesServiceStatus.OK) {
-                    const importedReviews = place.reviews
-                    let newImportRating = null
-                    if (importedReviews !== undefined) {
-                        importedReviews.map((importedReview, i) => (
-                            newImportRating = { stars: importedReview.rating, comment: importedReview.text },
-                            ratings.push(newImportRating)
-                        ))
-                        return resolve(ratings)
-                    }
+const findRatingsByRestaurant = async (placesService, findedRestaurant) => {
+    return new Promise((resolve) => {
+        let request = {
+            placeId: findedRestaurant.place_id,
+            fields: ['name', 'rating', 'review']
+        };
+        placesService.getDetails(request, callback);
+        let ratings = []
+        function callback(place, status) {
+            if (status === placeServiceStatusOK) {
+                const importedReviews = place.reviews
+                let newImportRating = null
+                if (importedReviews !== undefined) {
+                    importedReviews.map((importedReview, i) => (
+                        newImportRating = { stars: importedReview.rating, comment: importedReview.text },
+                        ratings.push(newImportRating)
+                    ))
+                    return resolve(ratings)
                 }
+            } else {
+                console.warn(`status error : ${placeServiceStatusOK} must be OK received ${status} `)
                 resolve([]);
             }
-        })
-    }
+
+        }
+    });
 }
 export default getNearbyRestaurantAndRatings;
